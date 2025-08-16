@@ -120,7 +120,7 @@
 
 .matches-table th, .matches-table td {
   padding: 10px 8px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #cdcccc;
   text-align: center;
 }
 
@@ -129,8 +129,11 @@
   font-weight: 600;
 }
 
-.matches-table tr:last-child td {
-  border-bottom: none;
+.event {
+  border: 2px solid #a8a7a7;
+  margin-bottom: 20px;
+  padding: 0 20px 20px 20px;
+  border-radius: 20px;
 }
 
 @media (max-width: 900px) {
@@ -358,4 +361,10 @@
 }
 .lossIndicator {
   color: rgb(251, 83, 83);
+}
+
+.fullRow {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
 }

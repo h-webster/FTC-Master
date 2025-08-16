@@ -34,7 +34,16 @@ const teamSchema = new mongoose.Schema({
   seasons: [{
     events: [{
       name: {type: String, required: true },
-      matches: [{
+      quals: [{
+        match: { type: Number },
+        points: { type: Number },
+        alliance: { type: String },
+        redScore: { type: Number },
+        blueScore: { type: Number },
+        blueTeams: [String],
+        redTeams: [String],
+      }],
+      playoffs: [{
         match: { type: Number },
         points: { type: Number },
         alliance: { type: String },

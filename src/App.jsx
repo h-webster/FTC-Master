@@ -5,6 +5,10 @@ import { extractTeamData, extractExtraData } from './DataExtraction';
 import LoadingScreen from './LoadingScreen';
 import { api } from './api';
 import { getTeamData, getExtraData, Query } from './Query';
+import { Matches } from './Matches';
+
+const VERSION = 8;
+
 
 // Tooltip component for simple stats
 const SimpleStatTooltip = ({ children, tooltipText, position = 'top' }) => {
@@ -81,7 +85,6 @@ function App() {
   useEffect(() => {
     if (submitted) {
       async function fetchData() {
-        const VERSION = 6;
         // First, try to get data from MongoDB
         let savedTeam = await api.getTeam(teamNumber);
         setSavedTeam(savedTeam);
@@ -143,7 +146,7 @@ function App() {
     if (submitted && !loading) {
       async function fetchExtraData() {
         if (getSavedTeam) {
-          if (getSavedTeam.seasons[seasonIndex].luckScore != -999) {
+          if (getSavedTeam.seasons[seasonIndex].luckScore != -999 && getSavedTeam.version == VERSION) {
             setLoadingExtras(false);
             console.log("Already have extra data");
             return;
@@ -253,7 +256,7 @@ function App() {
           position='top'
         >
           <div className='simple-stat'>
-            { !loadedExtras ? (
+            { !loadedExtras || mockData.seasons[seasonIndex].luckScore != -999 ? (
               <h3 className='simple-stat-value hasTooltip'>Matchup Advantage: {(mockData.seasons[seasonIndex].luckScore)}</h3>
             ) : (
               <h3 className='simple-stat-value hasTooltip'>Matchup Advantage: Loading...</h3>
@@ -292,63 +295,7 @@ function App() {
           )}
         </div>
       </div>
-      <div className="matches-table">
-        <h2>Matches</h2>
-        {season.events.map((e, idx) => (
-          <div className='event' key={idx}>
-            <h3>{e.name}</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Match</th>
-                  <th>Score</th>
-                  <th>Red</th>
-                  <th>Blue</th>
-                </tr>
-              </thead>
-              <tbody>
-              {e.matches.map((m, jdx) => (
-                <tr key={`${idx}-${jdx}`}>
-                  <td>{m.match}</td>
-                  <td>
-                    <span className='redScore'>{m.redScore}</span>-<span className='blueScore'>{m.blueScore}</span>
-                    { (m.alliance == "Red" && m.redScore > m.blueScore) || (m.alliance == "Blue" && m.blueScore > m.redScore) ? (
-                      <span className='winnerIndicator winIndicator'>👑 Win</span>
-                    ) : (m.redScore == m.blueScore) ? (
-                      <span className='winnerIndicator tieIndicator'>😬 Tie</span>
-                    ) : (
-                      <span className='winnerIndicator lossIndicator'>❌ Lose</span>
-                    )}
-                  </td>
-                  <td className='redTeam'>
-                    <div className='teamShow'>
-                      <span style={{ fontWeight: m.redTeams[0] == teamNumber ? 'bold' : 'normal' }}>
-                        {m.redTeams[0]}
-                      </span>
-                      , 
-                      <span style={{ fontWeight: m.redTeams[1] == teamNumber ? 'bold' : 'normal' }}>
-                        {m.redTeams[1]}
-                      </span>
-                    </div>
-                  </td>
-                  <td className='blueTeam'>
-                    <div className='teamShow'>
-                      <span style={{ fontWeight: m.blueTeams[0] == teamNumber ? 'bold' : 'normal' }}>
-                        {m.blueTeams[0]}
-                      </span>
-                      , 
-                      <span style={{ fontWeight: m.blueTeams[1] == teamNumber ? 'bold' : 'normal' }}>
-                        {m.blueTeams[1]}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
-      </div>
+      <Matches season={season} teamNumber={teamNumber}/>
     </div>
   );
 } 

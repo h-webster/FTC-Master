@@ -58,9 +58,11 @@ export function extractTeamData(teamData, returnData) {
     const events = teamData.teamByNumber.events;
     let processedEvents = [];
     for (const event of events) {
+        let i = 1;
         const matches = event.matches;
         gamesPlayed += matches.length;
-        let processedMatches = [];
+        let processedQuals = [];
+        let processedPlayoffs = [];
         for (const match of matches) {
             let theirAlliance = match.alliance;
             if (match.match.scores == null) {
@@ -113,20 +115,27 @@ export function extractTeamData(teamData, returnData) {
                 }
             }
 
-            // Create match data for storage
-            processedMatches.push({
-                match: processedMatches.length + 1,
+            let processedMatch = {
+                match: i,
                 points: teamPoints,
                 alliance: theirAlliance,
                 redScore: red,
                 blueScore: blue,
                 redTeams: redTeams,
-                blueTeams: blueTeams
-            });
+                blueTeams: blueTeams,
+            }
+
+            if (match.match.tournamentLevel == "Quals") {
+                processedQuals.push(processedMatch);
+            } else {
+                processedPlayoffs.push(processedMatch);
+            }
+            i++;
         }
         processedEvents.push({
             name: event.event.name,
-            matches: processedMatches
+            quals: processedQuals,
+            playoffs: processedPlayoffs,
         });
     }
     
