@@ -61,6 +61,10 @@ const teamSchema = new mongoose.Schema({
     luckScore: { type: String, default: '-999' },
     specimens: [Number],
     samples: [Number],
+    points: [{
+      matchNumber: {type: Number},
+      points: {type: Number},
+    }],
     rolePrediction: {
       percentSamples: { type: Number, default: 0 },
       percentSpecimens: { type: Number, default: 0 }

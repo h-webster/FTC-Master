@@ -6,8 +6,9 @@ import LoadingScreen from './LoadingScreen';
 import { api } from './api';
 import { getTeamData, getExtraData, Query } from './Query';
 import { Matches } from './Matches';
+import { PointsGraph } from './LineGraph';
 
-const VERSION = 8;
+const VERSION = 10;
 
 
 // Tooltip component for simple stats
@@ -294,6 +295,7 @@ function App() {
             </div>
           )}
         </div>
+        <PointsGraph data={season.points}/>
       </div>
       <Matches season={season} teamNumber={teamNumber}/>
     </div>

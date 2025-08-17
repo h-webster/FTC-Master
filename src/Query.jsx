@@ -24,7 +24,8 @@ export async function getTeamData(teamNumber) {
         }
         events(season: 2024) {
             event {
-                name
+              name
+              start
             }
             matches {
                 alliance

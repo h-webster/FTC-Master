@@ -51,13 +51,20 @@ export function extractTeamData(teamData, returnData) {
 
     let specimens = [];
     let samples = [];
+    let points = [];
 
     let gamesPlayed = 0;
     let totalPoints = 0;
 
     const events = teamData.teamByNumber.events;
     let processedEvents = [];
-    for (const event of events) {
+
+    events.sort((a, b) => {
+        return new Date(b.event.start) - new Date(a.event.start);
+    });
+
+    for (let eventI = events.length - 1; eventI >= 0; eventI--) {
+        let event = events[eventI];
         let i = 1;
         const matches = event.matches;
         gamesPlayed += matches.length;
@@ -127,6 +134,11 @@ export function extractTeamData(teamData, returnData) {
 
             if (match.match.tournamentLevel == "Quals") {
                 processedQuals.push(processedMatch);
+
+                points.push({
+                    points: theirAlliance == "Red" ? red : blue, 
+                    matchNumber: points.length + 1,
+                });
             } else {
                 processedPlayoffs.push(processedMatch);
             }
@@ -148,6 +160,7 @@ export function extractTeamData(teamData, returnData) {
     returnData.seasons[0].specimens = specimens;
     returnData.seasons[0].samples = samples;
     returnData.seasons[0].events = processedEvents; // Add matches to the season
+    returnData.seasons[0].points = points;
     returnData.name = teamData.teamByNumber.name;
 
     returnData.seasons[0].rolePrediction = teamRolePrediction(specimens, samples);
