@@ -9,7 +9,7 @@ import { Matches } from './Components/Matches';
 import { PointsGraph } from './Components/LineGraph';
 import { Ordinalize } from './Fancy';
 
-const VERSION = 12;
+const VERSION = 13;
 
 
 // Tooltip component for simple stats
@@ -266,6 +266,14 @@ function App() {
             )}
           </div>
         </SimpleStatTooltip>
+        { season.sponsors.length > 0 && (
+          <h3 className='simple-stat-value'>Sponsors: {season.sponsors.map((s, i) => (
+            <span key={i} className="sponsor" style={{ fontSize: season.sponsors.length > 7 ? '12px' : '1.1em' }}>
+              {s}{i === season.sponsors.length - 1 ? '' : ', '}
+            </span>
+          ))}
+          </h3>
+        )}
         <h3 className='simple-stat-value'>Rookie Year: {season.rookieYear}</h3>
         <h3 className='simple-stat-value'>Average Points: {season.avgPoints}</h3>
       </div>

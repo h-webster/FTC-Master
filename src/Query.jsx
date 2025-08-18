@@ -18,6 +18,7 @@ export async function getTeamData(teamNumber) {
         name
         number
         rookieYear
+        sponsors
         quickStats (season: 2024) {
           tot {
             value

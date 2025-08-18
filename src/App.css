@@ -254,7 +254,10 @@
 .simple-stat-value {
   margin: 0;
   font-weight: 400;
+  text-align: left;
 }
+
+
 
 .hasTooltip {
   font-weight: 700;
