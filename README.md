@@ -7,9 +7,10 @@ A comprehensive scouting and performance analysis tool for FIRST Tech Challenge 
 ## 🚀 Features
 
 ### Current Features
-- **Team Performance Overview**: Win/loss ratios, average points, and season statistics
+- **Team Performance Overview**: Win/loss ratios, average points, points over time and season statistics
 - **Role Prediction**: Data analysis techniques to determinine if a team is better suited for "Sample" or "Specimen" roles
 - **Matchup Analysis**: "Luck Score" calculation showing how favorable/difficult a team's opponents were
+- ** OPR Statistics**: Displays your best OPR (Offensive Power Rating) across these different categories: Total, Auto, Tele-op and Endgame.
 - **Detailed Match History**: Complete breakdown of all matches with scores and alliance information
 - **Data Caching**: MongoDB integration for faster load times and reduced API calls
 - **Interactive Visualizations**: Charts and graphs for easy data interpretation
@@ -53,3 +54,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. Also README was created with help from AI (Claude)
+
