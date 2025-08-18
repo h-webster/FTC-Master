@@ -9,7 +9,7 @@ import { Matches } from './Components/Matches';
 import { PointsGraph } from './Components/LineGraph';
 import { Ordinalize } from './Fancy';
 
-const VERSION = 11;
+const VERSION = 12;
 
 
 // Tooltip component for simple stats
@@ -266,6 +266,7 @@ function App() {
             )}
           </div>
         </SimpleStatTooltip>
+        <h3 className='simple-stat-value'>Rookie Year: {season.rookieYear}</h3>
         <h3 className='simple-stat-value'>Average Points: {season.avgPoints}</h3>
       </div>
       <div className="charts-container">

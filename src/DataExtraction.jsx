@@ -162,6 +162,7 @@ export function extractTeamData(teamData, returnData) {
     returnData.seasons[0].events = processedEvents; // Add matches to the season
     returnData.seasons[0].points = points;
     returnData.seasons[0].quickStats = teamData.teamByNumber.quickStats;
+    returnData.seasons[0].rookieYear = teamData.teamByNumber.rookieYear;
     returnData.name = teamData.teamByNumber.name;
 
     returnData.seasons[0].rolePrediction = teamRolePrediction(specimens, samples);

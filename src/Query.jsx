@@ -17,6 +17,7 @@ export async function getTeamData(teamNumber) {
       teamByNumber(number: ${teamNumber}) {
         name
         number
+        rookieYear
         quickStats (season: 2024) {
           tot {
             value
