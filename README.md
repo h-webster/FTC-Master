@@ -1,4 +1,4 @@
-# FTC Team Performance Analyzer
+# FTC-Master
 
 > **⚠️ Work in Progress**: This project is currently under active development and not yet complete. Website is not live currently.
 
@@ -54,5 +54,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. Also README was created with help from AI (Claude)
+
 
 
