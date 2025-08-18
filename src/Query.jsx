@@ -18,9 +18,22 @@ export async function getTeamData(teamNumber) {
         name
         number
         quickStats (season: 2024) {
-            tot {
-                value
-            }
+          tot {
+            value
+            rank
+          }
+          auto {
+            value
+            rank
+          }
+          dc {
+            value
+            rank
+          }
+          eg {
+            value
+            rank
+          }
         }
         events(season: 2024) {
             event {

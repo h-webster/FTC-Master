@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import './App.css';
 import { extractTeamData, extractExtraData } from './DataExtraction';
-import LoadingScreen from './LoadingScreen';
+import LoadingScreen from './Components/LoadingScreen';
 import { api } from './api';
 import { getTeamData, getExtraData, Query } from './Query';
-import { Matches } from './Matches';
-import { PointsGraph } from './LineGraph';
+import { Matches } from './Components/Matches';
+import { PointsGraph } from './Components/LineGraph';
+import { Ordinalize } from './Fancy';
 
-const VERSION = 10;
+const VERSION = 11;
 
 
 // Tooltip component for simple stats
@@ -156,6 +157,7 @@ function App() {
         const extraData = await getExtraData(teamNumber); 
         const extraDataResult = extractExtraData(extraData, mockData);
         console.log(extraDataResult);
+        console.log(season.quickStats);
         setMockData(extraDataResult);
         setLoadingExtras(false);
         
@@ -210,7 +212,7 @@ function App() {
     return (
       <div className="team-entry-screen">
         <form className="team-entry-form" onSubmit={handleSubmit}>
-          <h1>FTC Team Performance Visualizer</h1>
+          <h1>FTC-Master</h1>
           <label htmlFor="team-number">Enter Team Number:</label>
           <input
             id="team-number"
@@ -239,7 +241,7 @@ function App() {
       </header>
       <div className="simple-stats">
         <SimpleStatTooltip 
-          tooltipText={`Accuracy Estimations: ${mockData.seasons[seasonIndex].rolePrediction.percentSamples}% Samples, ${mockData.seasons[seasonIndex].rolePrediction.percentSpecimens}% Specimens`}
+          tooltipText={`Accuracy Estimations: ${mockData.seasons[seasonIndex].rolePrediction.percentSamples}% Samples, ${mockData.seasons[seasonIndex].rolePrediction.percentSpecimens}% Specimens. <br>This is a prediction and may not be their true role.`}
           position="top"
         >
           <div className="simple-stat role-prediction">
@@ -267,6 +269,34 @@ function App() {
         <h3 className='simple-stat-value'>Average Points: {season.avgPoints}</h3>
       </div>
       <div className="charts-container">
+        <div className='chart-card'>
+          <h2>OPR Stats</h2>
+          <div className='quick-stats'>
+            <div className="quick-stat">
+              <h3 className='quick-stat-title'>Total NP: {season.quickStats.tot.value.toFixed(2)}</h3>
+              <p className='quick-stat-desc'>{Ordinalize(season.quickStats.tot.rank)} / 7638</p>
+              {/* Will add this later after release
+              <h3 className='quick-stat-title'>Total NP OPR</h3>
+              <p className='quick-stat-desc'>Event Best: {season.quickStats.tot.value.toFixed(2)} ({Ordinalize(season.quickStats.tot.rank)}/8074)</p>
+              <p className='quick-stat-desc'>Season Avg: {Ordinalize(season.quickStats.tot.rank)}</p>
+              */}
+            </div>
+            <div className="quick-stat">
+              <h3 className='quick-stat-title'>Auto: {season.quickStats.auto.value.toFixed(2)}</h3>
+              <p className='quick-stat-desc'>{Ordinalize(season.quickStats.auto.rank)} / 7638</p>
+            </div>
+            <div className="quick-stat">
+              <h3 className='quick-stat-title'>Teleop: {season.quickStats.dc.value.toFixed(2)}</h3>
+              <p className='quick-stat-desc'>{Ordinalize(season.quickStats.dc.rank)} / 7638</p>
+            </div>
+            <div className="quick-stat">
+              <h3 className='quick-stat-title'>Endgame: {season.quickStats.eg.value.toFixed(2)}</h3>
+              <p className='quick-stat-desc'>{Ordinalize(season.quickStats.eg.rank)} / 7638</p>
+            </div>
+            
+            
+          </div>
+        </div>
         <div className="chart-card">
           <h2>Win/Loss Ratio</h2>
           { season.win == 0 && season.loss == 0 ? (

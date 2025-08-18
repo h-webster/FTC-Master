@@ -65,6 +65,24 @@ const teamSchema = new mongoose.Schema({
       matchNumber: {type: Number},
       points: {type: Number},
     }],
+    quickStats: {
+      auto: {
+        value: { type: Number, default: 0 },
+        rank: { type: Number, default: 0 },
+      },
+      dc: {
+        value: { type: Number, default: 0 },
+        rank: { type: Number, default: 0 },
+      },
+      eg: {
+        value: { type: Number, default: 0 },
+        rank: { type: Number, default: 0 },
+      },
+      tot: {
+        value: { type: Number, default: 0 },
+        rank: { type: Number, default: 0 },
+      },
+    },
     rolePrediction: {
       percentSamples: { type: Number, default: 0 },
       percentSpecimens: { type: Number, default: 0 }

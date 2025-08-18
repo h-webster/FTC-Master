@@ -1,6 +1,8 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+//import '../App.css';
 
 export const PointsGraph = ({data}) => {
+    console.log(data);
   return (
     <div className="outer-line-graph">
       <h2 className="line-graph-title">Points Over Time</h2>
