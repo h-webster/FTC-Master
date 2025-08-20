@@ -40,7 +40,7 @@ export const Matches = ({season, teamNumber}) => {
 
 const Match = ({m, idx, jdx, teamNumber}) => {
     return (
-        <tr>
+        <tr className="matchRow">
             <td>{m.match}</td>
             <td>
                 <span className='redScore'>{m.redScore}</span>-<span className='blueScore'>{m.blueScore}</span>
@@ -54,24 +54,40 @@ const Match = ({m, idx, jdx, teamNumber}) => {
             </td>
             <td className='redTeam'>
                 <div className='teamShow'>
-                <span style={{ fontWeight: m.redTeams[0] == teamNumber ? 'bold' : 'normal' }}>
-                    {m.redTeams[0]}
-                </span>
-                , 
-                <span style={{ fontWeight: m.redTeams[1] == teamNumber ? 'bold' : 'normal' }}>
-                    {m.redTeams[1]}
-                </span>
+                    {m.redTeams.map((team, index) => {
+                        const isCurrentTeam = team.number == teamNumber;
+                        const fontWeight = isCurrentTeam ? 'bold' : 'normal';
+                        
+                        return (
+                            <div key={index} className="team">
+                                <p className="teamNumber" style={{ fontWeight }}>
+                                    {team.number}
+                                </p>
+                                <p className="teamName" style={{ fontWeight }}>
+                                    {team.name}
+                                </p>
+                            </div>
+                        );            
+                    })}
                 </div>
             </td>
             <td className='blueTeam'>
                 <div className='teamShow'>
-                <span style={{ fontWeight: m.blueTeams[0] == teamNumber ? 'bold' : 'normal' }}>
-                    {m.blueTeams[0]}
-                </span>
-                , 
-                <span style={{ fontWeight: m.blueTeams[1] == teamNumber ? 'bold' : 'normal' }}>
-                    {m.blueTeams[1]}
-                </span>
+                    {m.blueTeams.map((team, index) => {
+                        const isCurrentTeam = team.number == teamNumber;
+                        const fontWeight = isCurrentTeam ? 'bold' : 'normal';
+                        
+                        return (
+                            <div key={index} className="team">
+                                <p className="teamNumber" style={{ fontWeight }}>
+                                    {team.number}
+                                </p>
+                                <p className="teamName" style={{ fontWeight }}>
+                                    {team.name}
+                                </p>
+                            </div>
+                        );            
+                    })}
                 </div>
             </td>
             </tr>

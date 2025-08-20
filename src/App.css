@@ -139,12 +139,49 @@
   background: #fafafa;
   border-radius: 8px;
   overflow: hidden;
+  table-layout: fixed;
+}
+
+.team {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  max-width: 100%;
+  overflow: hidden;
+}
+.team p {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Ensure header columns have the same fixed width so table-layout: fixed applies correctly */
+.matches-table th:nth-child(1) {
+  width: 5%;
+}
+.matches-table th:nth-child(2) {
+  width: 15%;
+}
+.matches-table th:nth-child(3) {
+  width: 40%;
+}
+.matches-table th:nth-child(4) {
+  width: 40%;
+}
+
+/* Ensure Red and Blue team cells don't overflow */
+.matches-table td:nth-child(3),
+.matches-table td:nth-child(4) {
+  overflow: hidden;
+  max-width: 0;
 }
 
 .matches-table th, .matches-table td {
-  padding: 10px 8px;
+  padding: 3px;
   border: 1px solid #cdcccc;
   text-align: center;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 
 .matches-table th {
@@ -379,6 +416,12 @@
   color: blue;
 }
 
+.teamShow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+}
+
 .winnerIndicator {
   margin-left: 10%;
 }
@@ -392,7 +435,8 @@
 .fullRow {
   text-align: center;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.2em;
+  margin: 5px;
 }
 
 .quick-stats {
@@ -408,4 +452,10 @@
 }
 .quick-stat-title {
   font-weight: bold;
+}
+.teamName {
+  font-size: 14px;
+}
+.teamNumber {
+  font-size: 20px;
 }

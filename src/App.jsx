@@ -9,7 +9,7 @@ import { Matches } from './Components/Matches';
 import { PointsGraph } from './Components/LineGraph';
 import { Ordinalize } from './Fancy';
 
-const VERSION = 13;
+const VERSION = 14;
 
 
 // Tooltip component for simple stats
@@ -279,7 +279,7 @@ function App() {
       </div>
       <div className="charts-container">
         <div className='chart-card'>
-          <h2>OPR Stats</h2>
+          <h2>Best OPR Stats</h2>
           <div className='quick-stats'>
             <div className="quick-stat">
               <h3 className='quick-stat-title'>Total NP: {season.quickStats.tot.value.toFixed(2)}</h3>

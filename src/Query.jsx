@@ -43,6 +43,7 @@ export async function getTeamData(teamNumber) {
               start
             }
             matches {
+                matchId
                 alliance
                 team {
                     name
@@ -67,7 +68,8 @@ export async function getTeamData(teamNumber) {
                         alliance
                         team {
                             number
-                            }
+                            name
+                         }
                         }
                     }
                 }

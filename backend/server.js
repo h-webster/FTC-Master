@@ -49,8 +49,14 @@ const teamSchema = new mongoose.Schema({
         alliance: { type: String },
         redScore: { type: Number },
         blueScore: { type: Number },
-        blueTeams: [String],
-        redTeams: [String],
+        blueTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
+        redTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
       }],
     }],
     year: { type: String, required: true },

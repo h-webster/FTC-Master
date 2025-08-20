@@ -114,11 +114,16 @@ export function extractTeamData(teamData, returnData) {
             let redTeams = [];
 
             for (const team of match.match.teams) {
+                const toPushTeam = {
+                    name: team.team.name,
+                    number: team.team.number,
+                };
+
                 if (team.alliance == "Red") {
-                    redTeams.push(team.team.number);
+                    redTeams.push(toPushTeam);
                 }
                 else {
-                    blueTeams.push(team.team.number);
+                    blueTeams.push(toPushTeam);
                 }
             }
 
