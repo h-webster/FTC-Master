@@ -133,6 +133,7 @@ function App() {
               number: teamNumber,
               version: VERSION
             };
+            console.log(teamDataToSave);
             await api.saveTeam(teamDataToSave);
             console.log("Saved team data to MongoDB");
           } catch (error) {

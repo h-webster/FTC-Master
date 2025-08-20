@@ -14,7 +14,7 @@ app.use(express.json());
 console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set (hidden for security)' : 'Not set');
 console.log('Attempting to connect to MongoDB...');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ftc-visualizer');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/FTC-master');
 
 
 const db = mongoose.connection;
@@ -24,6 +24,8 @@ db.on('error', (error) => {
 });
 db.once('open', () => {
   console.log('Connected to MongoDB successfully');
+  console.log('Connected to database:', mongoose.connection.db.databaseName);
+  console.log('Full connection info:', mongoose.connection.name);
 });
 
 // Team Schema
@@ -40,8 +42,14 @@ const teamSchema = new mongoose.Schema({
         alliance: { type: String },
         redScore: { type: Number },
         blueScore: { type: Number },
-        blueTeams: [String],
-        redTeams: [String],
+        blueTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
+        redTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
       }],
       playoffs: [{
         match: { type: Number },

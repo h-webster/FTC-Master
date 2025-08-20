@@ -136,6 +136,7 @@ export function extractTeamData(teamData, returnData) {
                 redTeams: redTeams,
                 blueTeams: blueTeams,
             }
+            console.log("redTeams: " + redTeams);
 
             if (match.match.tournamentLevel == "Quals") {
                 processedQuals.push(processedMatch);
@@ -157,7 +158,7 @@ export function extractTeamData(teamData, returnData) {
     }
     
     console.log("specimens", specimens);
-    console.log("samples", samples);
+    console.log("Events: ", processedEvents);
     returnData.seasons[0].win = wins;
     returnData.seasons[0].loss = losses;
     returnData.seasons[0].ties = ties;
