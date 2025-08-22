@@ -8,14 +8,14 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // MongoDB Connection
 console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set (hidden for security)' : 'Not set');
 console.log('Attempting to connect to MongoDB...');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/FTC-master');
-
+   
 
 const db = mongoose.connection;
 db.on('error', (error) => {
@@ -106,9 +106,27 @@ const teamSchema = new mongoose.Schema({
   }]
 });
 
+const teamsListSchema = new mongoose.Schema({
+  teams: [{
+    name: { type: String, required: true },
+    number: { type: Number, required: true }
+  }]
+});
+
 const Team = mongoose.model('Team', teamSchema);
+const TeamsList = mongoose.model('TeamsList', teamsListSchema)
 
 // Routes
+
+//get team list
+app.get('/api/teamsLists', async (req, res) => {
+  try {
+    const teamList = await TeamsList.find();
+    res.json(teamList);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Get all teams
 app.get('/api/teams', async (req, res) => {
@@ -154,6 +172,23 @@ app.post('/api/teams', async (req, res) => {
     }
     
     res.status(201).json(team);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Save/create team list
+app.post('/api/teamsList', async (req, res) => {
+  try {
+    const { teams } = req.body;
+
+    const list = new TeamsList({
+      teams: teams
+    });
+
+    await list.save();
+
+    res.status(201).json(list);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

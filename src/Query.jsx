@@ -117,4 +117,15 @@ export async function getExtraData(teamNumber) {
     return extraDataQuery.data;
   }
   
-  
+export async function getAllTeams(teamNumber) {
+  const query = `
+    {
+      teamsSearch(limit: 100000) {
+        name
+        number
+      }
+    }
+  `;
+  const allTeamsQuery = await Query(query);
+  return allTeamsQuery.data;
+}

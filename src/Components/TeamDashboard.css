@@ -1,0 +1,40 @@
+.ftc-dashboard {
+  width: 1000px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  color: #222;
+}
+
+.ftc-dashboard header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.team-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.team-name {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.ftc-dashboard h1 {
+  font-size: 2.2em;
+  margin: 0;
+}
+
+.ftc-dashboard select {
+  font-size: 1em;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}

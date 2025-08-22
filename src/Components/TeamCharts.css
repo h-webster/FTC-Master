@@ -1,0 +1,76 @@
+.charts-container {
+  display: flex;
+  gap: 32px;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.chart-card {
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 18px 12px 8px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  flex: 1 1 220px;
+  min-width: 225px;
+  text-align: center;
+}
+
+.line-graph {
+  min-width: 225px;
+  height: 300px;
+  text-align: center;
+}
+
+.outer-line-graph {
+  width: 100%;
+  height: 300px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 18px 12px 8px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-bottom: 4vh;
+}
+
+.line-graph-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.avg-points-label, .auto-success-label {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.win-loss-ratio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quick-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.quick-stat {
+  width: 40%;
+  border: 2px solid rgb(215, 214, 213);
+  border-radius: 10px;
+}
+
+.quick-stat-title {
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .charts-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+}

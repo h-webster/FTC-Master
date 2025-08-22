@@ -1,6 +1,30 @@
 const API_BASE_URL = 'http://localhost:5000/api';
 
 export const api = {
+  async saveTeamSearch(teams) {
+    try {
+      const payload = { teams: teams };
+      const response = await fetch(`${API_BASE_URL}/teamsLists`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => response.text());
+        console.error('Server error response:', errorData);
+        throw new Error(`Failed to save team list: ${JSON.stringify(errorData)}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error saving team:', error);
+      throw error;
+    }
+  },
+
   // Get team data from MongoDB
   async getTeam(teamNumber) {
     try {
@@ -72,6 +96,19 @@ export const api = {
       return await response.json();
     } catch (error) {
       console.error('Error fetching teams:', error);
+      return [];
+    }
+  },
+
+  async getTeamList() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/teamsLists`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch teams');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching teams:", error);
       return [];
     }
   }
