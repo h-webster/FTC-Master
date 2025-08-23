@@ -70,7 +70,7 @@
 .search-results {
   position: absolute;
   top: 100%;
-  left: -50px;
+  left: -150px;
   right: 0;
   background: white;
   border: 1px solid #ccc;
@@ -80,7 +80,7 @@
   z-index: 1000;
   margin-top: 2px;
   width: 100%;
-  min-width: 300px;
+  min-width: 500px;
   animation: slideDown 0.2s ease-out;
   box-sizing: border-box;
   overflow: hidden;
@@ -146,4 +146,8 @@
     left: 50%;
     transform: translateX(-50%);
   }
+}
+
+.beta {
+  color: rgb(85, 220, 254);
 }

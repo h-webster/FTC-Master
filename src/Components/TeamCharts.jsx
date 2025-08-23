@@ -11,7 +11,12 @@ export const TeamCharts = ({ season }) => {
     { name: 'Losses', value: season.loss },
     { name: 'Ties', value: season.ties },
   ];
-
+  console.log(JSON.stringify(season));
+  if (season.win + season.loss + season.ties == 0) {
+    return (
+      <div>Did not play</div>
+    )
+  }
   return (
     <div className="charts-container">
       <div className='chart-card'>

@@ -35,7 +35,7 @@ export const TeamEntryForm = ({ onSubmit, error }) => {
   return (
     <div className="team-entry-screen">
       <form className="team-entry-form" onSubmit={handleSubmit}>
-        <h1>FTC-Master</h1>
+        <h1>FTC-Master <span className="beta">[Beta]</span></h1>
         <label htmlFor="team-number">Enter Team Number/Name:</label>
         <div className="input-container">
           <input

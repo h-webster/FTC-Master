@@ -16,7 +16,7 @@ function App() {
   const [loadedTeamList, setLoadedTeamList] = useState(false);
   const [roleDiff, setRoleDiff] = useState(0);
 
-  const { mockData, setMockData, loading, loadedExtras } = useTeamData(teamNumber, submitted);
+  const { mockData, setMockData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted);
 
   // Calculate roleDiff when mockData changes
   useEffect(() => {
@@ -61,6 +61,8 @@ function App() {
     }
     
     setError('');
+    setLoading(true);
+    setLoadingExtras(true);
     setTeamNumber(teamNum);
     setSubmitted(true);
   };

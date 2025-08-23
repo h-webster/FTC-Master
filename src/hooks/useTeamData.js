@@ -3,7 +3,7 @@ import { api } from '../api';
 import { getTeamData, getExtraData } from '../Query';
 import { extractTeamData, extractExtraData } from '../DataExtraction';
 
-const VERSION = 14;
+const VERSION = 16;
 
 export const useTeamData = (teamNumber, submitted) => {
   const [mockData, setMockData] = useState({
@@ -131,5 +131,5 @@ export const useTeamData = (teamNumber, submitted) => {
     }
   }, [loading, savedTeam, teamNumber]);
 
-  return { mockData, setMockData, loading, loadedExtras, setLoadingExtras };
+  return { mockData, setMockData, loading, setLoading, loadedExtras, setLoadingExtras };
 };

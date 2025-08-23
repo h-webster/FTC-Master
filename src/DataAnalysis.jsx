@@ -18,6 +18,13 @@ export function teamRolePrediction(specimens, samples) {
     const total = scoreSamples + scoreSpecimens;
     const percentSamples = (scoreSamples / total) * 100;
     const percentSpecimens = (scoreSpecimens / total) * 100;
+
+    if (isNaN(percentSamples) || isNaN(percentSpecimens)) {
+        return {
+            percentSamples: 0,
+            percentSpecimens: 0
+        };
+    }
     return {
         percentSamples: percentSamples.toFixed(2),
         percentSpecimens: percentSpecimens.toFixed(2)
