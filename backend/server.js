@@ -15,29 +15,43 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? true 
+    ? ['https://ftc-master.vercel.app/']
     : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
 
+let cachedDb = null;
+
 // MongoDB Connection
-console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set (hidden for security)' : 'Not set');
-console.log('Attempting to connect to MongoDB...');
+async function connectToDatabase() {
+  if (cachedDb) {
+    return cachedDb;
+  }
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/FTC-master');
-   
+  try {
+    console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set (hidden for security)' : 'Not set');
+    console.log('Attempting to connect to MongoDB...');
 
-const db = mongoose.connection;
-db.on('error', (error) => {
-  console.error('MongoDB connection error:', error.message);
-  console.error('Error details:', error);
-});
-db.once('open', () => {
-  console.log('Connected to MongoDB successfully');
-  console.log('Connected to database:', mongoose.connection.db.databaseName);
-  console.log('Full connection info:', mongoose.connection.name);
-});
+    const connection = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/FTC-master', {
+      // Recommended options for serverless
+      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      bufferCommands: false, // Disable mongoose buffering
+      bufferMaxEntries: 0 // Disable mongoose buffering
+    });
+
+    cachedDb = connection;
+    console.log('Connected to MongoDB successfully');
+    console.log('Connected to database:', mongoose.connection.db.databaseName);
+    
+    return connection;
+  } catch (error) {
+    console.error('MongoDB connection error:', error.message);
+    throw error;
+  }
+}
+
 
 // Team Schema
 const teamSchema = new mongoose.Schema({
@@ -128,6 +142,17 @@ const Team = mongoose.model('Team', teamSchema);
 const TeamsList = mongoose.model('TeamsList', teamsListSchema)
 
 // Routes
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    res.status(500).json({ message: 'Database connection failed' });
+  }
+});
+
+
 
 //get team list
 app.get('/api/teamsLists', async (req, res) => {
