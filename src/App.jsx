@@ -15,6 +15,7 @@ function App() {
   const [error, setError] = useState('');
   const [loadedTeamList, setLoadedTeamList] = useState(false);
   const [roleDiff, setRoleDiff] = useState(0);
+  const [loadedName, setLoadedName] = useState(false);
 
   const { mockData, setMockData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted);
 
@@ -54,7 +55,9 @@ function App() {
       return;
     }
     
+    setLoadedName(true);
     const isValid = await isValidTeamNumber(teamNum);
+    setLoadedName(false);
     if (!isValid) {
       setError('Please enter a valid team number.');
       return;
@@ -67,7 +70,7 @@ function App() {
     setSubmitted(true);
   };
 
-  if (loading) {
+  if (loading || loadedName) {
     return <LoadingScreen />;
   }
 
