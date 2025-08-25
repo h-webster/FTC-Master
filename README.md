@@ -1,14 +1,15 @@
 # FTC-Master
-
-> **⚠️ Work in Progress**: This project is currently under active development and not yet complete. Website is not live currently.
+> **🚧 Beta Release**: This project is now live and available for use, but is currently in beta. Some features may be unstable and improvements are ongoing.
 
 A comprehensive scouting and performance analysis tool for FIRST Tech Challenge (FTC) robotics teams. Enter any team number to get detailed insights into their performance, strategic roles, and competitive advantages. Currently it's only built for the 2024-2025 FTC season.
 
-## 🚀 Features
+## 🌐 Live Website
+**Website**: [https://ftc-master.vercel.app](https://ftc-master.vercel.app)
 
+## 🚀 Features
 ### Current Features
 - **Team Performance Overview**: Win/loss ratios, average points, points over time and season statistics
-- **Role Prediction**: Data analysis techniques to determinine if a team is better suited for "Sample" or "Specimen" roles
+- **Role Prediction**: Data analysis techniques to determine if a team is better suited for "Sample" or "Specimen" roles
 - **Matchup Analysis**: "Luck Score" calculation showing how favorable/difficult a team's opponents were
 - **OPR Statistics**: Displays your best OPR (Offensive Power Rating) across these different categories: Total, Auto, Tele-op and Endgame.
 - **Detailed Match History**: Complete breakdown of all matches with scores and alliance information
@@ -24,22 +25,26 @@ A comprehensive scouting and performance analysis tool for FIRST Tech Challenge 
 - [ ] More detailed performance metrics
 
 ## 🛠️ Tech Stack
-
 - **Frontend**: React, Recharts for visualizations
-- **Backend**: Node.js (implied from API structure)
+- **Backend**: Node.js, Express
 - **Database**: MongoDB for data caching
 - **API**: FTCScout (GraphQL)
+- **Deployment**: Vercel
 
 ## 🎯 Usage
-
-1. Open the application in your browser
+1. Visit [https://ftc-master.vercel.app](https://ftc-master.vercel.app)
 2. Enter any valid FTC team number (e.g., 12345)
 3. Click "Analyze" to fetch and display team data
 4. Explore the various metrics and insights provided
 
-## 🤝 Contributing
+## 🐛 Beta Feedback
+Since this is a beta release, we welcome feedback and bug reports! If you encounter any issues:
+- Check the browser console for errors
+- Try refreshing the page
+- Report issues through GitHub Issues
 
-This project is currently in development. Contributions, suggestions, and feedback are welcome!
+## 🤝 Contributing
+This project is actively being developed. Contributions, suggestions, and feedback are welcome!
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -48,12 +53,7 @@ This project is currently in development. Contributions, suggestions, and feedba
 5. Open a Pull Request
 
 ## 📄 License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-**Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. Also README was created with help from AI (Claude)
-
-
-
+**Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. README was created with help from AI (Claude)
