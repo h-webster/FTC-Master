@@ -75,7 +75,7 @@ function App() {
   }
 
   if (!submitted) {
-    return <TeamEntryForm onSubmit={handleSubmit} error={error} />;
+    return <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={mockData} />;
   }
 
   return (

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { api } from '../api';
 import { getTeamData, getExtraData } from '../Query';
 import { extractTeamData, extractExtraData } from '../DataExtraction';
+import { VERSION } from '../utils/constants'
 
-const VERSION = 16;
 
 export const useTeamData = (teamNumber, submitted) => {
   const [mockData, setMockData] = useState({

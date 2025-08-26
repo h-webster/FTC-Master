@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { runSearch } from '../TeamSearch';
 import './TeamEntryForm.css';
+import { massTeamExtraction } from '../utils/massTeamExtract';
 
-export const TeamEntryForm = ({ onSubmit, error }) => {
+export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
   const [teamNumber, setTeamNumber] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -32,6 +33,12 @@ export const TeamEntryForm = ({ onSubmit, error }) => {
     setShowSearchResults(false);
   };
 
+  const bulkFetch = async (e) => {
+    e.preventDefault();
+    console.log("Starting Bulk Fetch");
+    await massTeamExtraction(mockData);
+  };
+
   return (
     <div className="team-entry-screen">
       <form className="team-entry-form" onSubmit={handleSubmit}>
@@ -43,6 +50,7 @@ export const TeamEntryForm = ({ onSubmit, error }) => {
             type="text"
             value={teamNumber}
             onChange={handleInputChange}
+            autocomplete="off"
             onFocus={() => {
               if (teamNumber.trim() && searchResults.length > 0) {
                 setShowSearchResults(true);
@@ -79,6 +87,11 @@ export const TeamEntryForm = ({ onSubmit, error }) => {
         <button type="submit">Analyze</button>
         {error && <div className="error-message">{error}</div>}
       </form>
+      { process.env.NODE_ENV != 'production' && (
+        <form onSubmit={bulkFetch}>
+          <button type="submit">Bulk Fetch</button>
+        </form>
+      )}
     </div>
   );
 };
