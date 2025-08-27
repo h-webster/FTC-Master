@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const fetch = require('node-fetch');
 
 let PORT;
 
@@ -9,6 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
   PORT = process.env.PORT || 5000;
 }
 
+const FTC_API_BASE_URL = 'http://ftc-api.firstinspires.org/v2.0'
 
 const app = express();
 
@@ -152,6 +154,7 @@ app.use(async (req, res, next) => {
     res.status(500).json({ message: 'Database connection failed' });
   }
 });
+
 
 
 

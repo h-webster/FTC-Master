@@ -1,3 +1,4 @@
+import axios from 'axios';
 export async function Query(q) {
     console.log(`Querying FTC API ~ ${q}`);
     const res = await fetch("https://api.ftcscout.org/graphql", {
@@ -9,7 +10,6 @@ export async function Query(q) {
     const data = await res.json();
     return data;
 }
-
 
 export async function getTeamData(teamNumber) {
     const query = `

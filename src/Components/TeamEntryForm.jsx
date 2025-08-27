@@ -50,7 +50,7 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
             type="text"
             value={teamNumber}
             onChange={handleInputChange}
-            autocomplete="off"
+            autoComplete="off"
             onFocus={() => {
               if (teamNumber.trim() && searchResults.length > 0) {
                 setShowSearchResults(true);

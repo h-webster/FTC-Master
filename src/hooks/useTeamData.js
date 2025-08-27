@@ -3,7 +3,7 @@ import { api } from '../api';
 import { getTeamData, getExtraData } from '../Query';
 import { extractTeamData, extractExtraData } from '../DataExtraction';
 import { VERSION } from '../utils/constants'
-
+import { getTeamMatches } from '../FTCApi';
 
 export const useTeamData = (teamNumber, submitted) => {
   const [mockData, setMockData] = useState({
@@ -97,7 +97,14 @@ export const useTeamData = (teamNumber, submitted) => {
       fetchData();
     }
   }, [submitted, teamNumber]);
-
+  
+  useEffect(() => {
+    async function fetchTeamMatches() {
+      let teamData = await getTeamMatches("CAABCAQ1", "27819");
+      console.log(JSON.stringify(teamData));
+    }
+    /*fetchTeamMatches();*/
+  }, []);
   useEffect(() => {
     if (submitted && !loading) {
       async function fetchExtraData() {
