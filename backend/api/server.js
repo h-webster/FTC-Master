@@ -215,7 +215,7 @@ app.post('/api/teams', async (req, res) => {
 });
 
 // Save/create team list
-app.post('/api/teamsList', async (req, res) => {
+app.post('/api/teamsLists', async (req, res) => {
   try {
     const { teams } = req.body;
 
@@ -266,6 +266,11 @@ app.delete('/api/teams/:number', async (req, res) => {
   }
 });
 
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running' });
+});
+
+
 
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
@@ -273,9 +278,5 @@ if (process.env.NODE_ENV !== 'production') {
   }); 
 }
 
-
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
-});
 
 module.exports = app;
