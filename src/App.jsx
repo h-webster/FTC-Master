@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import LoadingScreen from './Components/LoadingScreen';
+import Header from './Components/Header';
 import { TeamEntryForm } from './Components/TeamEntryForm';
 import { TeamDashboard } from './Components/TeamDashboard';
 import { createAutocomplete } from './TeamSearch';

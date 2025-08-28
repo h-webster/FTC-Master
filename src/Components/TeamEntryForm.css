@@ -1,6 +1,6 @@
 .team-entry-screen {
-  margin-top: 10vh;
-  min-height: 100vh;
+  margin-top: -10vh;
+  height: 80%;
   display: flex;
   align-items: flex-start;
   justify-content: center;

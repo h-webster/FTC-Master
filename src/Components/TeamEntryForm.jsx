@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { runSearch } from '../TeamSearch';
 import './TeamEntryForm.css';
 import { massTeamExtraction } from '../utils/massTeamExtract';
+import Header from './Header';
 
 export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
   const [teamNumber, setTeamNumber] = useState('');
@@ -41,8 +42,9 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
 
   return (
     <div className="team-entry-screen">
+      <Header/>
       <form className="team-entry-form">
-        <h1>FTC-Master <span className="beta">[Beta]</span></h1>
+        <h1>FTCMaster <span className="beta">[Beta]</span></h1>
         <label htmlFor="team-number">Enter Team Number/Name:</label>
         <div className="input-container">
           <input
