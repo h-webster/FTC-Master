@@ -2,10 +2,10 @@ import React from 'react';
 import './Header.css';
 
 const Header = () => (
-  <header>
-    <img className='big-img' src="../../logo.png"></img>
+  <div className='header'>
+    <img className='big-img' src="/logo.png"></img>
     <p className='big-text'>FTCMaster</p>
-  </header>
+  </div>
 );
 
 export default Header; 

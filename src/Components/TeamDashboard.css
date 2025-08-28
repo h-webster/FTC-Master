@@ -1,11 +1,30 @@
 .ftc-dashboard {
   width: 1000px;
-  margin: 40px auto;
+  margin: 12vh auto 40px auto;
   padding: 24px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   color: #222;
+}
+
+.header2 {
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10vh;
+  gap: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 1%;
+  background-color: rgb(223, 223, 24);
+}
+
+.team-dashboard {
+  height: 100%;
+  margin: 0;
 }
 
 .ftc-dashboard header {
