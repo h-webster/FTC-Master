@@ -102,7 +102,7 @@ export const useTeamData = (teamNumber, submitted) => {
     if (submitted && !loading) {
       async function fetchExtraData() {
         if (savedTeam) {
-          if (savedTeam.seasons[0].luckScore != 5.37 && savedTeam.version == VERSION) {
+          if (savedTeam.seasons[0].luckScore != -999 && savedTeam.version == VERSION) {
             setLoadingExtras(false);
             console.log("Already have extra data");
             return;
