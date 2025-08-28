@@ -29,8 +29,8 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
   };
 
   const handleResultClick = (result) => {
-    setTeamNumber(result.number.toString());
     setShowSearchResults(false);
+    onSubmit(result.number.toString());
   };
 
   const bulkFetch = async (e) => {
@@ -41,7 +41,7 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
 
   return (
     <div className="team-entry-screen">
-      <form className="team-entry-form" onSubmit={handleSubmit}>
+      <form className="team-entry-form">
         <h1>FTC-Master <span className="beta">[Beta]</span></h1>
         <label htmlFor="team-number">Enter Team Number/Name:</label>
         <div className="input-container">
@@ -50,7 +50,7 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
             type="text"
             value={teamNumber}
             onChange={handleInputChange}
-            autocomplete="off"
+            autoComplete="off"
             onFocus={() => {
               if (teamNumber.trim() && searchResults.length > 0) {
                 setShowSearchResults(true);
@@ -65,7 +65,7 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
           />
           {showSearchResults && (
             <div className="search-results">
-              {searchResults.length > 0 ? (
+              {searchResults?.length > 0 ? (
                 searchResults.map((result, index) => (
                   <div
                     key={index}
@@ -77,14 +77,15 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
                   </div>
                 ))
               ) : (
-                <div className="search-result-item no-results">
-                  <span>No teams found</span>
-                </div>
+                searchResults && (
+                  <div className="search-result-item no-results">
+                    <span>No teams found</span>
+                  </div>
+                )
               )}
             </div>
           )}
         </div>
-        <button type="submit">Analyze</button>
         {error && <div className="error-message">{error}</div>}
       </form>
       { process.env.NODE_ENV != 'production' && (

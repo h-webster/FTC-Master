@@ -197,6 +197,10 @@ export function createAutocomplete(teamsArray) {
 }
 
 export function runSearch(query) {
+    if (autocomplete == null) {
+        console.log("Null autocomplete");
+        return null;
+    }
     const result = autocomplete.search(query);
     return result.results;
 }

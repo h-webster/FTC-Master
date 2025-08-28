@@ -1,13 +1,38 @@
-export async function Query(q) {
-    console.log(`Querying FTC API ~ ${q}`);
-    const res = await fetch("https://api.ftcscout.org/graphql", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q })
+async function fetchWithTimeout(resource, options = {}) {
+  const { timeout = 8000 } = options; // 8s timeout
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(resource, {
+      ...options,
+      signal: controller.signal
     });
-    console.log("Fetched");
+    return response;
+  } finally {
+    clearTimeout(id);
+  }
+}
+
+export async function Query(q) {
+  console.log(`Querying FTC API ~ ${q}`);
+
+  try {
+    const res = await fetchWithTimeout("https://api.ftcscout.org/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: q }),
+      timeout: 45000 // adjust
+    });
+
     const data = await res.json();
     return data;
+  } catch (err) {
+    console.error("Request failed:", err);
+    alert("Request failed, please try again.");
+    window.location.reload();
+    return { error: "FTC API request failed or timed out" };
+  }
 }
 
 

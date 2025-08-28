@@ -16,6 +16,7 @@ function App() {
   const [loadedTeamList, setLoadedTeamList] = useState(false);
   const [roleDiff, setRoleDiff] = useState(0);
   const [loadedName, setLoadedName] = useState(false);
+  const [teamList, setTeamList] = useState(null);
 
   const { mockData, setMockData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted);
 
@@ -42,6 +43,7 @@ function App() {
 
       createAutocomplete(teamList[0].teams);
       setLoadedTeamList(true);
+      setTeamList(teamList[0].teams);
     }
     
     if (!loadedTeamList) {
@@ -56,7 +58,7 @@ function App() {
     }
     
     setLoadedName(true);
-    const isValid = await isValidTeamNumber(teamNum);
+    const isValid = isValidTeamNumber(teamNum, teamList);
     setLoadedName(false);
     if (!isValid) {
       setError('Please enter a valid team number.');

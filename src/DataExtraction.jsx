@@ -3,31 +3,41 @@ import {teamRolePrediction, calculateCarriedScore} from './DataAnalysis';
 export function extractExtraData(teamData, returnData) {
     console.log(teamData);
     const matches = teamData.teamByNumber.matches;
-    let gamesPlayed = matches.length;
-    
-    let totalPartnerOpr = 0;
-    let totalOpponentOpr = 0;
+    let games = [];
+
     for (const match of matches) {
         let theirAlliance = match.alliance;
         if (match.match.tournamentLevel != "Quals") {
             continue;
         }
-        let matchOpponentOpr = 0;
+        let partnerOpr = 0;
+        let opponentOpr = 0;
         for (const team of match.match.teams) {
             let thisAlliance = team.alliance;
+            if (team.team.quickStats == null) {
+                break;
+            }
             let thisOPR = team.team.quickStats.tot.value;
             if (thisAlliance == theirAlliance && team.team.number != teamData.teamByNumber.number) {
-                totalPartnerOpr += thisOPR;
+                partnerOpr += thisOPR;
             }
             if (thisAlliance != theirAlliance) {
-                matchOpponentOpr += thisOPR;
+                opponentOpr += thisOPR;
             }
         }
-        totalOpponentOpr += matchOpponentOpr / 2;
+        games.push({
+            partner: partnerOpr,
+            opponent: opponentOpr / 2
+        });
     }
     const OPR = teamData.teamByNumber.quickStats.tot.value;
-    
-    let luckScore = calculateCarriedScore(OPR, totalPartnerOpr, totalOpponentOpr, gamesPlayed) * 2;
+    let totalPartnerOpr = 0;
+    let totalOpponentOpr = 0;
+    for (let game of games) {
+        totalPartnerOpr += game.partner;
+        totalOpponentOpr += game.opponent;
+    }
+    let luckScore = calculateCarriedScore(OPR, totalPartnerOpr, totalOpponentOpr, games.length) * 2;
     
     // Create a new season with the updated luckScore
     const newSeason = {
@@ -189,7 +199,7 @@ export function extractTeamDataBULK(teamData, returnData) {
     let gamesPlayed = 0;
     let totalPoints = 0;
 
-    const events = teamData.teamByNumber.events;
+    const events = teamData.teamsSearch.events;
     let processedEvents = [];
 
     events.sort((a, b) => {
