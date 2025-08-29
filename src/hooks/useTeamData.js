@@ -6,7 +6,7 @@ import { VERSION } from '../utils/constants'
 
 
 export const useTeamData = (teamNumber, submitted) => {
-  const [mockData, setMockData] = useState({
+  const [teamData, setTeamData] = useState({
     name: "unknown",
     seasons: [
       {
@@ -38,6 +38,15 @@ export const useTeamData = (teamNumber, submitted) => {
   const [loadedExtras, setLoadingExtras] = useState(true);
   const [savedTeam, setSavedTeam] = useState(null);
 
+  const fetchTeamData = async () => {
+    const data = await getTeamData(teamNumber);
+    console.log("Got API data");
+    const teamDataResult = extractTeamData(data, mockData);
+    setTeamData(teamDataResult);
+    setLoading(false);
+    return teamDataResult;
+  };
+
   useEffect(() => {
     if (submitted) {
       async function fetchData() {
@@ -54,11 +63,7 @@ export const useTeamData = (teamNumber, submitted) => {
           setLoadingExtras(false);
         } else if (savedTeamData && savedTeamData.version != VERSION) {
           // Fetch fresh data from FTC API and save to MongoDB
-          const data = await getTeamData(teamNumber);
-          console.log("Got API data");
-          const teamDataResult = extractTeamData(data, mockData);
-          setMockData(teamDataResult);
-          setLoading(false);
+          const teamDataResult = fetchTeamData();
 
           try {
             const newDataToUpdate = {
@@ -73,12 +78,8 @@ export const useTeamData = (teamNumber, submitted) => {
           }
         } else {
           // Fetch fresh data from FTC API and save to MongoDB
-          const data = await getTeamData(teamNumber);
-          console.log("Got API data");
-          const teamDataResult = extractTeamData(data, mockData);
-          setMockData(teamDataResult);
-          setLoading(false);
-          
+          const teamDataResult = fetchTeamData();
+
           // Save to MongoDB
           try {
             const teamDataToSave = {
@@ -109,10 +110,10 @@ export const useTeamData = (teamNumber, submitted) => {
           }
         }
         const extraData = await getExtraData(teamNumber); 
-        const extraDataResult = extractExtraData(extraData, mockData);
+        const extraDataResult = extractExtraData(extraData, teamData);
         console.log(extraDataResult);
-        console.log(mockData.seasons[0].quickStats);
-        setMockData(extraDataResult);
+        console.log(teamData.seasons[0].quickStats);
+        setTeamData(extraDataResult);
         setLoadingExtras(false);
         
         // Update MongoDB with extra data
@@ -131,5 +132,5 @@ export const useTeamData = (teamNumber, submitted) => {
     }
   }, [loading, savedTeam, teamNumber]);
 
-  return { mockData, setMockData, loading, setLoading, loadedExtras, setLoadingExtras };
+  return { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras };
 };
