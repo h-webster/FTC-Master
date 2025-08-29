@@ -8,6 +8,8 @@ import { createAutocomplete } from './TeamSearch';
 import { useTeamData } from './hooks/useTeamData';
 import { isValidTeamNumber } from './utils/teamValidation';
 import { api } from './api';
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   const [seasonIndex, setSeasonIndex] = useState(0);
@@ -77,17 +79,28 @@ function App() {
   }
 
   if (!submitted) {
-    return <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={teamData} />;
+    return (
+    <>
+      <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={teamData} />;
+      <Analytics/>
+      <SpeedInsights/>
+    </>
+    );
   }
 
   return (
-    <TeamDashboard 
+    <>
+      <TeamDashboard 
       teamNumber={teamNumber}
       mockData={teamData}
       seasonIndex={seasonIndex}
       loadedExtras={loadedExtras}
       roleDiff={roleDiff}
-    />
+      />
+      <Analytics/>
+      <SpeedInsights/>
+    </>
+    
   );
 }
 
