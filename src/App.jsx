@@ -19,16 +19,16 @@ function App() {
   const [loadedName, setLoadedName] = useState(false);
   const [teamList, setTeamList] = useState(null);
 
-  const { mockData, setMockData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted);
+  const { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted);
 
   // Calculate roleDiff when mockData changes
   useEffect(() => {
-    if (mockData.seasons[seasonIndex]?.rolePrediction) {
-      const currentSeason = mockData.seasons[seasonIndex];
-      console.log(mockData.matches);
+    if (teamData.seasons[seasonIndex]?.rolePrediction) {
+      const currentSeason = teamData.seasons[seasonIndex];
+      console.log(teamData.matches);
       setRoleDiff(currentSeason.rolePrediction.percentSamples - currentSeason.rolePrediction.percentSpecimens);
     }
-  }, [mockData, seasonIndex]);
+  }, [teamData, seasonIndex]);
 
   // Load team list for autocomplete
   useEffect(() => {
@@ -78,13 +78,13 @@ function App() {
   }
 
   if (!submitted) {
-    return <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={mockData} />;
+    return <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={teamData} />;
   }
 
   return (
     <TeamDashboard 
       teamNumber={teamNumber}
-      mockData={mockData}
+      mockData={teamData}
       seasonIndex={seasonIndex}
       loadedExtras={loadedExtras}
       roleDiff={roleDiff}
