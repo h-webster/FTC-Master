@@ -15,7 +15,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://ftc-master.vercel.app']
+    ? ['https://ftc-master.vercel.app', 'https://www.ftcmaster.org', 'https://ftcmaster.org']
     : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
