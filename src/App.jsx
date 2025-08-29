@@ -41,7 +41,6 @@ function App() {
       } catch (error) {
         console.error("Failed to get from MongoDB:", error);
       }
-
       createAutocomplete(teamList[0].teams);
       setLoadedTeamList(true);
       setTeamList(teamList[0].teams);
