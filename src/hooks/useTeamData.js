@@ -41,7 +41,7 @@ export const useTeamData = (teamNumber, submitted) => {
   const fetchTeamData = async () => {
     const data = await getTeamData(teamNumber);
     console.log("Got API data");
-    const teamDataResult = extractTeamData(data, mockData);
+    const teamDataResult = extractTeamData(data, teamData);
     setTeamData(teamDataResult);
     setLoading(false);
     return teamDataResult;
@@ -58,12 +58,12 @@ export const useTeamData = (teamNumber, submitted) => {
           // Use saved data from MongoDB
           console.log("Found saved team data");
           console.log(savedTeamData);
-          setMockData(savedTeamData);
+          setTeamData(savedTeamData);
           setLoading(false);
           setLoadingExtras(false);
         } else if (savedTeamData && savedTeamData.version != VERSION) {
           // Fetch fresh data from FTC API and save to MongoDB
-          const teamDataResult = fetchTeamData();
+          const teamDataResult = await fetchTeamData();
 
           try {
             const newDataToUpdate = {
@@ -78,7 +78,7 @@ export const useTeamData = (teamNumber, submitted) => {
           }
         } else {
           // Fetch fresh data from FTC API and save to MongoDB
-          const teamDataResult = fetchTeamData();
+          const teamDataResult = await fetchTeamData();
 
           // Save to MongoDB
           try {
