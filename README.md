@@ -17,10 +17,10 @@ A comprehensive scouting and performance analysis tool for FIRST Tech Challenge 
 - **Interactive Visualizations**: Charts and graphs for easy data interpretation
 
 ### Planned Features
+- [ ] Routing with Next.js
 - [ ] Multi-season stats
 - [ ] Certain event breakdown/ scouting report 
 - [ ] Team vs team direct comparison
-- [ ] Advanced statistical analysis
 - [ ] Mobile-responsive design improvements
 - [ ] More detailed performance metrics
 
@@ -28,14 +28,8 @@ A comprehensive scouting and performance analysis tool for FIRST Tech Challenge 
 - **Frontend**: React, Recharts for visualizations
 - **Backend**: Node.js, Express
 - **Database**: MongoDB for data caching
-- **API**: FTCScout (GraphQL)
+- **API**: FTCEventsAPI and FTCScout (GraphQL + Rest)
 - **Deployment**: Vercel
-
-## 🎯 Usage
-1. Visit [https://ftc-master.vercel.app](https://ftc-master.vercel.app)
-2. Enter any valid FTC team number (e.g., 12345)
-3. Click "Analyze" to fetch and display team data
-4. Explore the various metrics and insights provided
 
 ## 🐛 Beta Feedback
 Since this is a beta release, we welcome feedback and bug reports! If you encounter any issues:
@@ -56,5 +50,6 @@ This project is actively being developed. Contributions, suggestions, and feedba
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-**Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. README was created with help from AI (Claude)
+**Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. 
+
 
