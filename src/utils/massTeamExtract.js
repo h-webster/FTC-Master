@@ -2,7 +2,7 @@ import { getAllTeamNumbers } from '../Query';
 import { VERSION } from './constants';
 import { api } from '../api';
 import { getTeamData, getExtraData } from '../Query';
-import { extractTeamData, extractExtraData } from '../DataExtraction';
+import { extractExtraData } from '../DataExtraction';
 
 export async function massTeamExtraction(mockData) {
     console.log("DISABLED");

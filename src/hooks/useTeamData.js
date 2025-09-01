@@ -1,35 +1,25 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import { getTeamData, getExtraData } from '../Query';
-import { extractTeamData, extractExtraData } from '../DataExtraction';
+import { extractExtraData, collectTeamData } from '../DataExtraction';
 import { VERSION } from '../utils/constants'
 
-
-export const useTeamData = (teamNumber, submitted) => {
+export const useTeamData = (teamNumber, submitted, teamMap) => {
   const [teamData, setTeamData] = useState({
     name: "unknown",
     seasons: [
       {
         year: '2024',
-        win: 18,
-        loss: 7,
-        ties: 2,
-        avgPoints: 120,
-        autoSuccess: 0.75,
+        win: 0,
+        loss: 0,
+        ties: 0,
+        avgPoints: 0,
+        autoSuccess: 0,
         rolePrediction: {
           percentSamples: 65,
           percentSpecimens: 35
         },
         events: [
-          {
-            name: "Last Chance",
-            matches: [
-              { match: 1, points: 110, auto: true },
-              { match: 2, points: 130, auto: false },
-              { match: 3, points: 120, auto: true },
-            ],
-            luckScore: -999,
-          }
         ]
       },
     ],
@@ -39,14 +29,11 @@ export const useTeamData = (teamNumber, submitted) => {
   const [savedTeam, setSavedTeam] = useState(null);
 
   const fetchTeamData = async () => {
-    const data = await getTeamData(teamNumber);
-    console.log("Got API data");
-    const teamDataResult = extractTeamData(data, teamData);
-    setTeamData(teamDataResult);
+    const result = await collectTeamData(teamNumber, teamData, teamMap);
+    setTeamData(result);
     setLoading(false);
-    return teamDataResult;
+    return result;
   };
-
   useEffect(() => {
     if (submitted) {
       async function fetchData() {
@@ -103,11 +90,19 @@ export const useTeamData = (teamNumber, submitted) => {
     if (submitted && !loading) {
       async function fetchExtraData() {
         if (savedTeam) {
+          if (savedTeam.seasons[0].events.length == 0) {
+            console.log("Didn't play so don't get extra data");
+            return;
+          }
           if (savedTeam.seasons[0].luckScore != -999 && savedTeam.version == VERSION) {
             setLoadingExtras(false);
             console.log("Already have extra data");
             return;
           }
+        }
+        if (teamData.seasons[0].events.length == 0) {
+          console.log("Didn't play so don't get extra data");
+          return;
         }
         const extraData = await getExtraData(teamNumber); 
         const extraDataResult = extractExtraData(extraData, teamData);

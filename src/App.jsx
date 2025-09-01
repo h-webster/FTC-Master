@@ -20,8 +20,10 @@ function App() {
   const [roleDiff, setRoleDiff] = useState(0);
   const [loadedName, setLoadedName] = useState(false);
   const [teamList, setTeamList] = useState(null);
+  const [teamMap, setTeamMap] = useState(null);
 
-  const { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted);
+  const { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted, teamMap);
+
 
   // Calculate roleDiff when mockData changes
   useEffect(() => {
@@ -39,7 +41,15 @@ function App() {
       try {
         console.log("Getting from mongo db...");
         teamList = await api.getTeamList();
-        console.log("Team list: " + JSON.stringify(teamList[0].teams));
+        console.log("Got Team list!!");
+
+        // turn team list into teamMap
+        const teamArray = teamList[0].teams;
+        const teamDict = teamArray.reduce((acc, team) => {
+          acc[team.number] = team.name;
+          return acc; 
+        }, {});
+        setTeamMap(teamDict);
       } catch (error) {
         console.error("Failed to get from MongoDB:", error);
       }
@@ -81,7 +91,7 @@ function App() {
   if (!submitted) {
     return (
     <>
-      <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={teamData} />;
+      <TeamEntryForm onSubmit={handleSubmit} error={error} mockData={teamData} />
       <Analytics/>
       <SpeedInsights/>
     </>

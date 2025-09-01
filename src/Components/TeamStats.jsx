@@ -26,7 +26,9 @@ export const TeamStats = ({ mockData, seasonIndex, loadedExtras, roleDiff }) => 
         position='top'
       >
         <div className='simple-stat'>
-          { !loadedExtras || season.luckScore != -999 ? (
+          { season.events.length == 0 ? (
+            <h3 className='simple-stat-value hasTooltip'>Matchup Advantage: 0</h3>
+          ) : (!loadedExtras || season.luckScore != -999) ? (
             <h3 className='simple-stat-value hasTooltip'>Matchup Advantage: {(season.luckScore)}</h3>
           ) : (
             <h3 className='simple-stat-value hasTooltip'>Matchup Advantage: Loading...</h3>

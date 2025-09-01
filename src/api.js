@@ -31,7 +31,6 @@ export const api = {
       const response = await fetch(`${API_BASE_URL}/teams/${teamNumber}`);
       if (!response.ok) {
         throw new Error('Team not found');
-        console.log("This kinda fine");
       }
       return await response.json();
     } catch (error) {

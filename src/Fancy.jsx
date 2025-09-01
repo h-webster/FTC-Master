@@ -10,3 +10,10 @@ export function Ordinalize(num) {
     }
     return `${num}th`;
 }
+
+export function TeamNotFound(data) {
+    if (JSON.stringify(data).includes("Parameter Format In Request")) {
+        return true;
+    }
+    return false;
+}
