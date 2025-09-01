@@ -1,10 +1,10 @@
-# FTC-Master
+# FTCMaster
 > **🚧 Beta Release**: This project is now live and available for use, but is currently in beta. Some features may be unstable and improvements are ongoing.
 
 A comprehensive scouting and performance analysis tool for FIRST Tech Challenge (FTC) robotics teams. Enter any team number to get detailed insights into their performance, strategic roles, and competitive advantages. Currently it's only built for the 2024-2025 FTC season.
 
 ## 🌐 Live Website
-**Website**: [https://ftc-master.vercel.app](https://ftc-master.vercel.app)
+**Website**: [https://ftcmaster.org](https://ftcmaster.org)
 
 ## 🚀 Features
 ### Current Features
@@ -57,3 +57,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 **Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. README was created with help from AI (Claude)
+
