@@ -18,8 +18,8 @@ export const officialAPI = {
         const res = await fetch(`${API_BASE_URL}/api/team/${teamNumber}`);
         return res.json();
     },
-    async getScoreDetails(eventCode, tournamentLevel, teamNumber) {
-        const res = await fetch(`${API_BASE_URL}/api/scores/${eventCode}/${tournamentLevel}/${teamNumber}`);
+    async getScoreDetails(eventCode, tournamentLevel) {
+        const res = await fetch(`${API_BASE_URL}/api/scores/${eventCode}/${tournamentLevel}`);
         return res.json();
     }
 }

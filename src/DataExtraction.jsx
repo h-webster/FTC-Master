@@ -2,6 +2,8 @@ import {teamRolePrediction, calculateCarriedScore} from './DataAnalysis';
 import { officialAPI } from './hooks/useEventsData';
 import { scoutAPI } from './hooks/useRest';
 import { TeamNotFound } from './Fancy';
+import { getOPR } from './utils/OPRCalculator';
+
 
 export function extractExtraData(teamData, returnData) {
     console.log(teamData);
@@ -108,13 +110,25 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
         let processedQuals = [];
         let processedPlayoffs = [];
 
-        const specimenSamples = await getSpecimensSamples(teamNumber, event.code, eventData.matches);
+        
+
+        let scoreByQualMatch;
+        let scoreByPlayoffMatch;
+        scoreByQualMatch = await setScoreDetails(event.code);
+        console.log("Got score details for Event " + event.name);
+
+        const specimenSamples = getSpecimensSamples(teamNumber, eventData.matches, scoreByQualMatch);
         console.log("Got specimens and samples!");
         console.log("Specimens: " + specimenSamples.specimens + "\n" + "Samples: " + specimenSamples.samples);
     
         samples = [...samples, ...specimenSamples.samples];
         specimens = [...specimens, ...specimenSamples.specimens];
 
+        /*
+        console.log("Getting OPR for Event " + event.name);
+        const OPRResult = OPR(eventData.matches, scoreByQualMatch, teamMap);
+        console.log("OPR: " + OPRResult);
+        */
         for (let match of eventData.matches) {
             allMatches.push(match);
             let blueTeams = [];
@@ -215,6 +229,15 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
     
 
     console.log("Events: ", processedEvents);
+
+    
+
+
+    console.log("Getting OPR")
+
+    console.log(samples);
+    
+
     returnData.seasons[0].win = wins;
     returnData.seasons[0].loss = losses;
     returnData.seasons[0].ties = ties;
@@ -233,17 +256,99 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
     return returnData;
 }
 
-export async function getSpecimensSamples(teamNumber, eventCode, matches) {
-    const qualScoreDetails = await officialAPI.getScoreDetails(eventCode, "qual", teamNumber);
+export async function setScoreDetails(eventCode) {
+    const qualScoreDetails = await officialAPI.getScoreDetails(eventCode, "qual");
     console.log(`Got ${eventCode} qual score details`);
+    const scoreByQualMatch = new Map();
+    for (const score of qualScoreDetails.matchScores) {
+        scoreByQualMatch.set(score.matchNumber, score);
+    }
+
+    /*
+    const playoffScoreDetails = await officialAPI.getScoreDetails(eventCode, "playoff", teamNumber);
+    console.log(`Got ${eventCode} playoff score details`);
+    const scoreByPlayoffMatch = new Map();
+    for (const score of playoffScoreDetails.matchScores) {
+        scoreByPlayoffMatch.set(score.matchNumber, score);
+    }
+    */
+    return scoreByQualMatch;
+} 
+
+
+function OPR(eventMatches, scoreByMatch, teamMap) {
+    // [team number, team name]
+    let allTeams = []; 
+    let teamSet = new Set();
+
+    // [redTeam1, redTeam2, redScore, redAuto, redTele, redEnd, blueTeam1, blueTeam2, blueScore, blueAuto, blueTele, blueEnd]
+    let matches = [];
+    for (const match of eventMatches) {
+        if (match.tournamentLevel == "QUALIFICATION") continue;
+
+        const score = scoreByMatch.get(match.matchNumber);
+        let teams = [0,0,0,0];
+        for (const team of match.teams) {
+            const teamNum = team.teamNumber; 
+            if (!teamSet.has(teamNum)) {
+                teamSet.add(teamNum);
+                allTeams.push({
+                    number: teamNum,
+                    name: teamMap[teamNum]
+                });
+            }
+
+            // ooh this is ugly
+            if (team.station == "Red1") {
+                teams[0] = teamNum;
+            }
+            else if (team.station == "Red2") {
+                teams[1] = teamNum;
+            } 
+            else if (team.station == "Blue1") {
+                teams[2] = teamNum;
+            }
+            else if (team.station == "Blue2") {
+                teams[3] = teamNum;
+            }
+        }
+        let redAlliance;
+        let blueAlliance;
+        for (const alliance of score.alliances) {
+            if (alliance.alliance == "Blue") {
+                blueAlliance = alliance;
+            } else if (alliance.alliance == "Red") {
+                redAlliance = alliance;
+            } else {
+                throw new Error(`Unknown alliance: ${alliance.alliance}`);
+            }
+        }
+        let redEndgame = redAlliance.teleopAscentPoints + redAlliance.teleopParkPoints;
+        let blueEndgame = blueAlliance.teleopAscentPoints + blueAlliance.teleopAscentPoints;
+        let matchObject = {
+            red: [teams[0], teams[1]],
+            blue: [teams[2], teams[3]],
+            redScore: match.scoreRedFinal,
+            redAuto: match.scoreRedAuto,
+            redTele: redAlliance.teleopPoints,
+            redEnd: redEndgame,
+            blueScore: match.scoreBlueFinal,
+            blueAuto: match.scoreBlueAuto,
+            blueTele: blueAlliance.teleopPoints,
+            blueEnd: blueEndgame
+        };
+        matches.push(matchObject);
+    }
+    return getOPR(allTeams, matches);
+}
+
+
+function getSpecimensSamples(teamNumber, matches, scoreByMatch) {
     //console.log(JSON.stringify(qualScoreDetails));
 
     let samples = [];
     let specimens = [];
-    const scoreByMatch = new Map();
-    for (const score of qualScoreDetails.matchScores) {
-        scoreByMatch.set(score.matchNumber, score);
-    }
+
     for (let match of matches) {
         //console.log("Match: " + match.matchNumber);
         if (match.tournamentLevel != "QUALIFICATION") continue;

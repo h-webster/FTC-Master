@@ -108,7 +108,7 @@ const teamSchema = new mongoose.Schema({
       matchNumber: {type: Number},
       points: {type: Number},
     }],
-    rookieYear: { type: Number, default: 0 },
+    rookieYear: { type: String, default: '0' },
     sponsors: [String],
     quickStats: {
       season: { type: Number, default: 0},
@@ -248,9 +248,7 @@ app.get('/api/team/:number', async (req, res) => {
   }
 })
 
-app.get('/api/scores/:eventCode/:tournamentLevel/:teamNumber', async (req, res) => {
-  const teamNumber = req.params.teamNumber;
-  if (!teamNumber) return res.status(400).json({ error: "teamNumber is required" });
+app.get('/api/scores/:eventCode/:tournamentLevel', async (req, res) => {
   const eventCode = req.params.eventCode;
   if (!eventCode) return res.status(400).json({ error: "eventCode is required" });
   const tournamentLevel = req.params.tournamentLevel;
@@ -261,7 +259,7 @@ app.get('/api/scores/:eventCode/:tournamentLevel/:teamNumber', async (req, res) 
     return res.status(400).json({ error: "incorrect tournament level"});
   }
 
-  const url = `https://ftc-api.firstinspires.org/v2.0/2024/scores/${eventCode}/${tournamentLevel}?teamNumber=${teamNumber}`;
+  const url = `https://ftc-api.firstinspires.org/v2.0/2024/scores/${eventCode}/${tournamentLevel}`;
   try {
     const response = await fetch(url, {
       headers: {

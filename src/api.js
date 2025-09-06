@@ -41,7 +41,7 @@ export const api = {
 
   // Save team data to MongoDB
   async saveTeam(teamData) {
-    console.log("attempting to save:", JSON.stringify(teamData, null, 2));
+    //console.log("attempting to save:", JSON.stringify(teamData, null, 2));
     try {
       const response = await fetch(`${API_BASE_URL}/teams`, {
         method: 'POST',
