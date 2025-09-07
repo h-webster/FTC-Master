@@ -213,6 +213,16 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
                 processedPlayoffs.push(processedMatch);
             }
         }
+        const timeNow = new Date();
+        const eventEnd = event.dateEnd;
+        const oneDay = 24 * 60 * 60 *1000;
+        // event has been over for one day (append to db)
+        if (timeNow - eventEnd >= oneDay) {
+            console.log("Event is done!!");
+        }
+        else {
+            console.log("Event isn't done");
+        }
         processedEvents.push({
             name: event.name,
             quals: processedQuals,
@@ -389,7 +399,4 @@ async function getScoreDetails(eventCode, teamNumber) {
     console.log(`Got ${eventCode} qual score details`);
     const playoffScoreDetails = await officialAPI.getScoreDetails(eventCode, "playoff", teamNumber);
     console.log(`Got ${eventCode} playoff score details`);
-
-
-    qualScoreDetails.matchScores
 }

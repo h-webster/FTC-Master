@@ -111,5 +111,32 @@ export const api = {
       console.error("Error fetching teams:", error);
       return [];
     }
+  },
+
+  async addEvent(eventData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/eventsList`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => response.text());
+        console.error('Server error response:', errorData);
+        throw new Error(`Failed to save team data: ${JSON.stringify(errorData)}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error saving team:', error);
+      throw error;
+    }
+  }
+  
+  async getEvent(name) {
+    
   }
 }; 

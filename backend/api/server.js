@@ -145,8 +145,45 @@ const teamsListSchema = new mongoose.Schema({
   }]
 });
 
+const eventSchema = new mongoose.Schema({
+  event: [{
+      name: {type: String, required: true },
+      quals: [{
+        match: { type: Number },
+        points: { type: Number },
+        alliance: { type: String },
+        redScore: { type: Number },
+        blueScore: { type: Number },
+        blueTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
+        redTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
+      }],
+      playoffs: [{
+        match: { type: Number },
+        points: { type: Number },
+        alliance: { type: String },
+        redScore: { type: Number },
+        blueScore: { type: Number },
+        blueTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
+        redTeams: [{
+          name: {type: String},
+          number: {type: Number},
+        }],
+      }],
+    }]
+});
+
 const Team = mongoose.model('Team', teamSchema);
 const TeamsList = mongoose.model('TeamsList', teamsListSchema)
+const EventsList = mongoose.model('EventsList', eventSchema)
 
 // Routes
 app.use(async (req, res, next) => {
@@ -330,6 +367,22 @@ app.post('/api/teamsLists', async (req, res) => {
 
     const list = new TeamsList({
       teams: teams
+    });
+
+    await list.save();
+
+    res.status(201).json(list);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.post('/api/eventsList', async (req, res) => {
+  try {
+    const { teams } = req.body;
+
+    const list = new EventsList({
+      event: event 
     });
 
     await list.save();
