@@ -16,6 +16,9 @@ export const TeamCharts = ({ season }) => {
       <div>Did not play</div>
     )
   }
+
+  const totalTeams = season.quickStats.count;
+
   return (
     <div className="charts-container">
       <div className='chart-card'>
@@ -23,19 +26,19 @@ export const TeamCharts = ({ season }) => {
         <div className='quick-stats'>
           <div className="quick-stat">
             <h3 className='quick-stat-title'>Total NP: {season.quickStats.tot.value.toFixed(2)}</h3>
-            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.tot.rank)} / 7638</p>
+            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.tot.rank)} / {totalTeams}</p>
           </div>
           <div className="quick-stat">
             <h3 className='quick-stat-title'>Auto: {season.quickStats.auto.value.toFixed(2)}</h3>
-            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.auto.rank)} / 7638</p>
+            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.auto.rank)} / {totalTeams}</p>
           </div>
           <div className="quick-stat">
             <h3 className='quick-stat-title'>Teleop: {season.quickStats.dc.value.toFixed(2)}</h3>
-            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.dc.rank)} / 7638</p>
+            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.dc.rank)} / {totalTeams}</p>
           </div>
           <div className="quick-stat">
             <h3 className='quick-stat-title'>Endgame: {season.quickStats.eg.value.toFixed(2)}</h3>
-            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.eg.rank)} / 7638</p>
+            <p className='quick-stat-desc'>{Ordinalize(season.quickStats.eg.rank)} / {totalTeams}</p>
           </div>
         </div>
       </div>

@@ -140,7 +140,10 @@ app.get('/api/quick-stats/:number', async (req, res) => {
 // get individual team information (rookie year etc) (FTCEventsApi)
 app.get('/api/team/:number', async (req, res) => {
   const teamNumber = req.params.number;
-  if (!teamNumber) return res.status(400).json({ error: "teamNumber is required" });
+  if (!teamNumber) {
+    console.log("No team number");
+    return res.status(400).json({ error: "teamNumber is required" });
+  }
 
   const url = `https://ftc-api.firstinspires.org/v2.0/2024/teams?teamNumber=${teamNumber}`;
   try {
