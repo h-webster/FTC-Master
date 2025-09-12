@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import { getTeamData, getExtraData } from '../Query';
-import { extractExtraData, collectTeamData } from '../DataExtraction';
+import { extractExtraData} from '../DataExtraction';
 import { VERSION } from '../utils/constants'
+import { collectTeamData } from '../CollectTeamData';
 
 export const useTeamData = (teamNumber, submitted, teamMap) => {
   const [teamData, setTeamData] = useState({
