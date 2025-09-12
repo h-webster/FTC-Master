@@ -20,6 +20,7 @@
     "ml-matrix": "^6.12.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-router-dom": "^7.9.1",
     "recharts": "^3.0.2"
   },
   "devDependencies": {
