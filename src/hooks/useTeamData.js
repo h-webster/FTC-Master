@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
-import { getTeamData, getExtraData } from '../Query';
-import { extractExtraData} from '../DataExtraction';
-import { VERSION } from '../utils/constants'
+import { getExtraData } from '../Query';
+import { extractExtraData } from '../DataExtraction';
+import { VERSION } from '../utils/constants';
 import { collectTeamData } from '../CollectTeamData';
 
-export const useTeamData = (teamNumber, submitted, teamMap) => {
+export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
+  // Top-level hooks — always called
   const [teamData, setTeamData] = useState({
     name: "unknown",
     seasons: [
@@ -20,8 +21,7 @@ export const useTeamData = (teamNumber, submitted, teamMap) => {
           percentSamples: 65,
           percentSpecimens: 35
         },
-        events: [
-        ]
+        events: []
       },
     ],
   });
@@ -29,104 +29,77 @@ export const useTeamData = (teamNumber, submitted, teamMap) => {
   const [loadedExtras, setLoadingExtras] = useState(true);
   const [savedTeam, setSavedTeam] = useState(null);
 
+  // Fetch fresh team data
   const fetchTeamData = async () => {
     const result = await collectTeamData(teamNumber, teamData, teamMap);
     setTeamData(result);
     setLoading(false);
     return result;
   };
+
+  // Effect: load main team data
   useEffect(() => {
-    if (submitted) {
-      async function fetchData() {
-        // First, try to get data from MongoDB
-        let savedTeamData = await api.getTeam(teamNumber);
-        setSavedTeam(savedTeamData);
-        
-        if (savedTeamData && savedTeamData.version == VERSION) {
-          // Use saved data from MongoDB
-          console.log("Found saved team data");
-          console.log(savedTeamData);
-          setTeamData(savedTeamData);
-          setLoading(false);
-          setLoadingExtras(false);
-        } else if (savedTeamData && savedTeamData.version != VERSION) {
-          // Fetch fresh data from FTC API and save to MongoDB
-          const teamDataResult = await fetchTeamData();
+    if (!submitted || !teamMap || Object.keys(teamMap).length === 0) return;
 
-          try {
-            const newDataToUpdate = {
-              ...teamDataResult,
-              number: teamNumber,
-              version: VERSION
-            };
-            await api.updateTeam(teamNumber, newDataToUpdate);
-            console.log("Reupdated team data in MongoDB");
-          } catch (error) {
-            console.error("Failed to update MongoDB:", error);
-          }
-        } else {
-          // Fetch fresh data from FTC API and save to MongoDB
-          const teamDataResult = await fetchTeamData();
+    const fetchData = async () => {
+      setLoading(true);
+      let savedTeamData = await api.getTeam(teamNumber);
+      setSavedTeam(savedTeamData);
 
-          // Save to MongoDB
-          try {
-            const teamDataToSave = {
-              ...teamDataResult,
-              number: teamNumber,
-              version: VERSION
-            };
-            console.log(teamDataToSave);
-            await api.saveTeam(teamDataToSave);
-            console.log("Saved team data to MongoDB");
-          } catch (error) {
-            console.error("Failed to save to MongoDB:", error);
-          }
+      if (savedTeamData && savedTeamData.version === VERSION) {
+        setTeamData(savedTeamData);
+        setLoading(false);
+        setLoadingExtras(false);
+      } else {
+        const freshData = await fetchTeamData();
+        const payload = { ...freshData, number: teamNumber, version: VERSION };
+        try {
+          if (savedTeamData) await api.updateTeam(teamNumber, payload);
+          else await api.saveTeam(payload);
+        } catch (err) {
+          console.error("Failed to save/update MongoDB:", err);
         }
       }
-      fetchData();
-    }
-  }, [submitted, teamNumber]);
+    };
 
+    fetchData();
+  }, [submitted, teamNumber, teamMap]);
+
+  // Effect: load extra data
   useEffect(() => {
-    if (submitted && !loading) {
-      async function fetchExtraData() {
-        if (savedTeam) {
-          if (savedTeam.seasons[0].events.length == 0) {
-            console.log("Didn't play so don't get extra data");
-            return;
-          }
-          if (savedTeam.seasons[0].luckScore != -999 && savedTeam.version == VERSION) {
-            setLoadingExtras(false);
-            console.log("Already have extra data");
-            return;
-          }
-        }
-        if (teamData.seasons[0].events.length == 0) {
-          console.log("Didn't play so don't get extra data");
+    if (!submitted || loading) return;
+
+    const fetchExtraData = async () => {
+      if (savedTeam) {
+        if (savedTeam.seasons[0].events.length === 0) {
+          setLoadingExtras(false);
           return;
         }
-        const extraData = await getExtraData(teamNumber); 
-        const extraDataResult = extractExtraData(extraData, teamData);
-        console.log(extraDataResult);
-        console.log(teamData.seasons[0].quickStats);
-        setTeamData(extraDataResult);
-        setLoadingExtras(false);
-        
-        // Update MongoDB with extra data
-        try {
-          const extraDataToUpdate = {
-            ...extraDataResult,
-            number: teamNumber
-          };
-          await api.updateTeam(teamNumber, extraDataToUpdate);
-          console.log("Updated team data with extra info in MongoDB");
-        } catch (error) {
-          console.error("Failed to update MongoDB:", error);
+        if (savedTeam.seasons[0].luckScore !== -999 && savedTeam.version === VERSION) {
+          setLoadingExtras(false);
+          return;
         }
       }
-      fetchExtraData();
-    }
-  }, [loading, savedTeam, teamNumber]);
+
+      if (teamData.seasons[0].events.length === 0) {
+        setLoadingExtras(false);
+        return;
+      }
+
+      try {
+        const extraRaw = await getExtraData(teamNumber);
+        const extraResult = extractExtraData(extraRaw, teamData);
+        setTeamData(extraResult);
+        setLoadingExtras(false);
+
+        await api.updateTeam(teamNumber, { ...extraResult, number: teamNumber });
+      } catch (err) {
+        console.error("Failed to fetch/update extra data:", err);
+      }
+    };
+
+    fetchExtraData();
+  }, [loading, savedTeam, teamNumber, submitted, teamData]);
 
   return { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras };
 };

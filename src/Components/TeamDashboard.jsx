@@ -2,41 +2,79 @@ import { TeamStats } from './TeamStats';
 import { TeamCharts } from './TeamCharts';
 import { Matches } from './Matches';
 import './TeamDashboard.css';
+import storage from '../utils/storage';
+import { loadTeamList } from '../loadStorageValues';
+import { useState, useEffect } from 'react';
+import LoadingScreen from './LoadingScreen';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { useTeamData } from '../hooks/useTeamData';
 
-export const TeamDashboard = ({ teamNumber, mockData, seasonIndex, loadedExtras, roleDiff }) => {
-  const goHome = () => {
-    window.location.reload();
-  };
+export default function TeamDashboard() {
+  const navigate = useNavigate();
+  const { teamNumber } = useParams();
+  const [seasonIndex, setSeasonIndex] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  // Initialize teamMap and teamList
+  useEffect(() => {
+    const initData = async () => {
+      if (!storage.teamList || !storage.teamMap) {
+        await loadTeamList();
+      }
+      setReady(true);
+    };
+    initData();
+  }, []);
+
+  // Always call useTeamData — pass empty object if storage.teamMap is not ready
+  const { teamData, loading, loadedExtras } = useTeamData(teamNumber, true, storage.teamMap || {});
+
+  // Update role difference
+  useEffect(() => {
+    const currentSeason = teamData.seasons[seasonIndex];
+    if (currentSeason?.rolePrediction) {
+      storage.setRoleDiff(currentSeason.rolePrediction.percentSamples - currentSeason.rolePrediction.percentSpecimens);
+    }
+  }, [teamData, seasonIndex]);
+
+  if (!ready) return <LoadingScreen />;
+
+  const goHome = () => navigate('/');
 
   return (
-    <div className='team-dashboard'>
-      <div className='header2'>
-        <div className='display'>
-          <img className='big-img' src="/logo.png"></img>
-          <p className='big-text'>FTCMaster</p>
-          <button className='home-btn' onClick={goHome}>Home</button>
+    <>
+      <div className='team-dashboard'>
+        <div className='header2'>
+          <div className='display'>
+            <img className='big-img' src="/logo.png" alt="Logo"/>
+            <p className='big-text'>FTCMaster</p>
+            <button className='home-btn' onClick={goHome}>Home</button>
+          </div>
+        </div>
+        <div className="ftc-dashboard">
+          <header>
+            <div className="team-title">
+              <h1>Team {teamNumber} Performance</h1>
+              <h2 className="team-name">{teamData.name}</h2>
+            </div>
+          </header>
+
+          <TeamStats 
+            mockData={teamData}
+            seasonIndex={seasonIndex}
+            loadedExtras={loadedExtras}
+            roleDiff={storage.roleDiff}
+          />
+
+          <TeamCharts season={teamData.seasons[seasonIndex]} />
+
+          <Matches season={teamData.seasons[seasonIndex]} teamNumber={teamNumber} />
         </div>
       </div>
-      <div className="ftc-dashboard">
-        <header>
-          <div className="team-title">
-            <h1>Team {teamNumber} Performance</h1>
-            <h2 className="team-name">{mockData.name}</h2>
-          </div>
-        </header>
-        
-        <TeamStats 
-          mockData={mockData}
-          seasonIndex={seasonIndex}
-          loadedExtras={loadedExtras}
-          roleDiff={roleDiff}
-        />
-        
-        <TeamCharts season={mockData.seasons[seasonIndex]} />
-        
-        <Matches season={mockData.seasons[seasonIndex]} teamNumber={teamNumber} />
-      </div>
-    </div>
-    
+      <Analytics/>
+      <SpeedInsights/>
+    </>
   );
-};
+}
