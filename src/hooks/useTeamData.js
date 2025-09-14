@@ -99,7 +99,7 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
     };
 
     fetchExtraData();
-  }, [loading, savedTeam, teamNumber, submitted, teamData]);
+  }, [loading, savedTeam, teamNumber, submitted]);
 
   return { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras };
 };
