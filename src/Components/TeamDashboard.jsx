@@ -39,7 +39,7 @@ export default function TeamDashboard() {
     }
   }, [teamData, seasonIndex]);
 
-  if (!ready) return <LoadingScreen />;
+  if (!ready || loading) return <LoadingScreen />;
 
   const goHome = () => navigate('/');
 
