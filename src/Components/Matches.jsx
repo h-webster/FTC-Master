@@ -5,7 +5,8 @@ export const Matches = ({season, teamNumber}) => {
     return (
         <div className="matches-table">
             {/*<h2>Matches</h2>*/}
-            {season.events.map((e, idx) => (
+            {/* Loop through matches from newest to oldest */}
+            {[...season.events].reverse().map((e, idx) => (
                 <div className='event' key={idx}>
                     <h3>{e.name}</h3>
                     <table>
