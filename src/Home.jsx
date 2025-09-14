@@ -2,36 +2,42 @@ import { useState, useEffect } from 'react';
 import LoadingScreen from './Components/LoadingScreen';
 import Header from './Components/Header';
 import { TeamEntryForm } from './Components/TeamEntryForm';
-import { TeamDashboard } from './Components/TeamDashboard';
+import TeamDashboard from './Components/TeamDashboard';
 import { createAutocomplete } from './TeamSearch';
 import { useTeamData } from './hooks/useTeamData';
 import { isValidTeamNumber } from './utils/teamValidation';
 import { api } from './api';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { useNavigate } from 'react-router-dom';
+import storage from './utils/storage';
 
-function App() {
+export default function Home() {
+  const navigate = useNavigate();
   const [seasonIndex, setSeasonIndex] = useState(0);
   const [teamNumber, setTeamNumber] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [loadedTeamList, setLoadedTeamList] = useState(false);
-  const [roleDiff, setRoleDiff] = useState(0);
   const [loadedName, setLoadedName] = useState(false);
-  const [teamList, setTeamList] = useState(null);
-  const [teamMap, setTeamMap] = useState(null);
 
-  const { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted, teamMap);
-
+  const { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted, storage.teamMap);
 
   // Calculate roleDiff when mockData changes
   useEffect(() => {
     if (teamData.seasons[seasonIndex]?.rolePrediction) {
       const currentSeason = teamData.seasons[seasonIndex];
       console.log(teamData.matches);
-      setRoleDiff(currentSeason.rolePrediction.percentSamples - currentSeason.rolePrediction.percentSpecimens);
+      storage.setRoleDiff(currentSeason.rolePrediction.percentSamples - currentSeason.rolePrediction.percentSpecimens);
     }
   }, [teamData, seasonIndex]);
+  
+  // navigate after submit
+  useEffect(() => {
+    if (submitted && teamNumber) {
+      navigate(`/teams/${teamNumber}`);
+    }
+  }, [submitted, teamNumber, navigate])
 
   // Load team list for autocomplete
   useEffect(() => {
@@ -48,13 +54,13 @@ function App() {
           acc[team.number] = team.name;
           return acc; 
         }, {});
-        setTeamMap(teamDict);
+        storage.setTeamMap();
       } catch (error) {
         console.error("Failed to get from MongoDB:", error);
       }
       createAutocomplete(teamList[0].teams);
       setLoadedTeamList(true);
-      setTeamList(teamList[0].teams);
+      storage.setTeamList(teamList[0].teams);
     }
     
     if (!loadedTeamList) {
@@ -69,7 +75,7 @@ function App() {
     }
     
     setLoadedName(true);
-    const isValid = isValidTeamNumber(teamNum, teamList);
+    const isValid = isValidTeamNumber(teamNum, storage.teamList);
     setLoadedName(false);
     if (!isValid) {
       setError('Please enter a valid team number.');
@@ -97,20 +103,5 @@ function App() {
     );
   }
 
-  return (
-    <>
-      <TeamDashboard 
-      teamNumber={teamNumber}
-      mockData={teamData}
-      seasonIndex={seasonIndex}
-      loadedExtras={loadedExtras}
-      roleDiff={roleDiff}
-      />
-      <Analytics/>
-      <SpeedInsights/>
-    </>
-    
-  );
+  return null;
 }
-
-export default App;
