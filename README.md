@@ -17,7 +17,6 @@ A comprehensive scouting and performance analysis tool for FIRST Tech Challenge 
 - **Interactive Visualizations**: Charts and graphs for easy data interpretation
 
 ### Planned Features
-- [ ] Routing with Next.js
 - [ ] Multi-season stats
 - [ ] Certain event breakdown/ scouting report 
 - [ ] Team vs team direct comparison
@@ -51,5 +50,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 **Note**: This project is not officially affiliated with FIRST or the FIRST Tech Challenge program. 
+
 
 
