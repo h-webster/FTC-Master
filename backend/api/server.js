@@ -9,7 +9,7 @@ let PORT;
 if (process.env.NODE_ENV !== 'production') {
   
   require('dotenv').config();
-  //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   PORT = process.env.PORT || 5000;
 }
 

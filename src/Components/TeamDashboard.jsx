@@ -39,6 +39,10 @@ export default function TeamDashboard() {
     }
   }, [teamData, seasonIndex]);
 
+  useEffect(() => {
+    document.title = `FTCMaster - Team ${teamNumber}`;
+  }, [teamNumber]);
+
   if (!ready || loading) return <LoadingScreen />;
 
   const goHome = () => navigate('/');

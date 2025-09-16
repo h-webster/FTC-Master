@@ -159,9 +159,11 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
         let dateEnd = new Date(event.dateEnd);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-        // Convert to desired format
-        const formattedDateStart = dateStart.toLocaleDateString('en-US', options);
-        const formattedDateEnd = dateEnd.toLocaleDateString('en-US', options);
+        // Check if dateStart is valid
+        const formattedDateStart = isNaN(dateStart.getTime()) ? "Unknown" : dateStart.toLocaleDateString('en-US', options);
+
+        // Check if dateEnd is valid
+        const formattedDateEnd = isNaN(dateEnd.getTime()) ? "Unknown" : dateEnd.toLocaleDateString('en-US', options);
 
         processedEvents.push({
             name: event.name,
