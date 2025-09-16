@@ -44,7 +44,8 @@ export const TeamStats = ({ mockData, seasonIndex, loadedExtras, roleDiff }) => 
         ))}
         </h3>
       )}
-      
+
+      <h3 className='simple-stat-value'>Location: {season.location}</h3>
       <h3 className='simple-stat-value'>Rookie Year: {season.rookieYear}</h3>
       <h3 className='simple-stat-value'>Average Points: {season.avgPoints}</h3>
     </div>

@@ -7,9 +7,12 @@ import {teamRolePrediction} from './DataAnalysis'
 export async function collectTeamData(teamNumber, returnData, teamMap) {
     returnData.name = teamMap[teamNumber];
     returnData.seasons[0].rookieYear = "Not Found";
+    returnData.seasons[0].location = "Unknown";
 
     const thisTeam = await getThisTeam(teamNumber);
     if (TeamNotFound(thisTeam)) return returnData;
+
+    returnData.seasons[0].location = thisTeam.teams[0].city + ", " + thisTeam.teams[0].stateProv + ", " + thisTeam.teams[0].country;
 
     console.log("Got this team!");
     console.log("This Team: " + JSON.stringify(thisTeam));

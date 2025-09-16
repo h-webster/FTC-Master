@@ -52,6 +52,7 @@ const teamSchema = new mongoose.Schema({
       points: {type: Number},
     }],
     rookieYear: { type: String, default: '0' },
+    location: { type: String, default: '0' },
     sponsors: [String],
     quickStats: {
       season: { type: Number, default: 0},

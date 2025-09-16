@@ -7,7 +7,9 @@ const mongoRoutes = require('./routes/mongoRoutes');
 let PORT;
 
 if (process.env.NODE_ENV !== 'production') {
+  
   require('dotenv').config();
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   PORT = process.env.PORT || 5000;
 }
 
@@ -107,6 +109,7 @@ app.get('/api/team/:number', async (req, res) => {
     const data = await response.json();
     res.json(data);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 })
