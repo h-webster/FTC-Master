@@ -155,10 +155,20 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
                 processedPlayoffs.push(processedMatch);
             }
         }
+        let dateStart = new Date(event.dateStart);
+        let dateEnd = new Date(event.dateEnd);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+        // Convert to desired format
+        const formattedDateStart = dateStart.toLocaleDateString('en-US', options);
+        const formattedDateEnd = dateEnd.toLocaleDateString('en-US', options);
+
         processedEvents.push({
             name: event.name,
             quals: processedQuals,
             playoffs: processedPlayoffs,
+            dateStart: formattedDateStart,
+            dateEnd: formattedDateEnd
         });
     }
     console.log(JSON.stringify(data));

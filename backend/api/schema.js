@@ -8,6 +8,8 @@ const teamSchema = new mongoose.Schema({
   seasons: [{
     events: [{
       name: {type: String, required: true },
+      dateStart: { type: Date, required: true },
+      dateEnd: { type: Date, required: true },
       quals: [{
         match: { type: Number },
         points: { type: Number },

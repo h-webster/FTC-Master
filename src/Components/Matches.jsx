@@ -1,3 +1,5 @@
+import calendericon from '../assets/calender.svg';
+
 export const Matches = ({season, teamNumber}) => {
     if (season.events == null) {
         return null;
@@ -8,7 +10,8 @@ export const Matches = ({season, teamNumber}) => {
             {/* Loop through matches from newest to oldest */}
             {[...season.events].reverse().map((e, idx) => (
                 <div className='event' key={idx}>
-                    <h3>{e.name}</h3>
+                    <h2>{e.name}</h2>
+                    <h3 className='event-small'><img src={calendericon} width={20} height={20} />{e.dateStart} - {e.dateEnd}</h3>
                     <table>
                     <thead>
                         <tr>

@@ -115,6 +115,14 @@
   border-radius: 20px;
 }
 
+.event-small {
+  text-align: left;
+  gap: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+}
+
 .redTeam {
   background-color: rgb(249, 125, 125);
 }
