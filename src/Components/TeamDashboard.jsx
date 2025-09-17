@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { useTeamData } from '../hooks/useTeamData';
+import Header from './Header';
 
 export default function TeamDashboard() {
   const navigate = useNavigate();
@@ -50,13 +51,7 @@ export default function TeamDashboard() {
   return (
     <>
       <div className='team-dashboard'>
-        <div className='header2'>
-          <div className='display'>
-            <img className='big-img' src="/logo.png" alt="Logo"/>
-            <p className='big-text'>FTCMaster</p>
-            <button className='home-btn' onClick={goHome}>Home</button>
-          </div>
-        </div>
+        <Header/>
         <div className="ftc-dashboard">
           <header>
             <div className="team-title">

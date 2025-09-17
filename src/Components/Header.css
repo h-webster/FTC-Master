@@ -1,12 +1,15 @@
 .header {
-    width: 100%;
+    width: 100vw;
     height: 10vh;
     top: 0;
     position: fixed;
     display: flex;
     align-items: center;
+    gap: 10px;
     justify-content: flex-start;
     background-color: rgb(223, 223, 24);
+    left: 0;
+    z-index: 999;
 }
 .display {
     display: flex;
