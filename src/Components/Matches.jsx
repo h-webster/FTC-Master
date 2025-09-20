@@ -1,6 +1,9 @@
 import calendericon from '../assets/calender.svg';
 import podiumicon from '../assets/podium.svg';
+import { useNavigate } from 'react-router-dom';
+
 export const Matches = ({season, teamNumber}) => {
+    const navigate = useNavigate();
     if (season.events == null) {
         return null;
     }
@@ -30,13 +33,13 @@ export const Matches = ({season, teamNumber}) => {
                     <tbody>
                         <tr key="Quals"><td colSpan={4} className='fullRow'>Quals</td></tr>
                         {e.quals.map((q, jdx) => (
-                            <Match m={q} idx={idx} jdx={jdx} teamNumber={teamNumber} key={`quals-${idx}-${jdx}`} />
+                            <Match m={q} idx={idx} jdx={jdx} nav={navigate} teamNumber={teamNumber} key={`quals-${idx}-${jdx}`} />
                         ))}
                         {e.playoffs.length > 0 && (
                             <>
                                 <tr key="Playoffs"><td colSpan={4} className='fullRow'>Playoffs</td></tr>
                                 {e.playoffs.map((p, jdx) => (
-                                    <Match m={p} idx={idx} jdx={jdx} teamNumber={teamNumber} key={`playoffs-${idx}-${jdx}`}/>
+                                    <Match m={p} idx={idx} jdx={jdx} teamNumber={teamNumber} nav={navigate} key={`playoffs-${idx}-${jdx}`}/>
                                 ))}
                             </> 
                         )}    
@@ -48,7 +51,11 @@ export const Matches = ({season, teamNumber}) => {
     );
 };
 
-const Match = ({m, idx, jdx, teamNumber}) => {
+const openTeam = (teamNumber, nav) => {
+    nav(`/teams/${teamNumber}`);
+}
+
+const Match = ({m, idx, jdx, teamNumber, nav}) => {
     return (
         <tr className="matchRow">
             <td>{m.match}</td>
@@ -69,14 +76,14 @@ const Match = ({m, idx, jdx, teamNumber}) => {
                         const fontWeight = isCurrentTeam ? 'bold' : 'normal';
                         
                         return (
-                            <div key={index} className="team">
+                            <button onClick={() => openTeam(team.number, nav)} key={index} className="team">
                                 <p className="teamNumber" style={{ fontWeight }}>
                                     {team.number}
                                 </p>
                                 <p className="teamName" style={{ fontWeight }}>
                                     {team.name}
                                 </p>
-                            </div>
+                            </button>
                         );            
                     })}
                 </div>
@@ -88,14 +95,14 @@ const Match = ({m, idx, jdx, teamNumber}) => {
                         const fontWeight = isCurrentTeam ? 'bold' : 'normal';
                         
                         return (
-                            <div key={index} className="team">
+                            <button onClick={() => openTeam(team.number, nav)} key={index} className="team">
                                 <p className="teamNumber" style={{ fontWeight }}>
                                     {team.number}
                                 </p>
                                 <p className="teamName" style={{ fontWeight }}>
                                     {team.name}
                                 </p>
-                            </div>
+                            </button>
                         );            
                     })}
                 </div>
