@@ -9,7 +9,7 @@ export default function About() {
         <h2 className="about-title">About FTCMaster</h2>
         <h3><u>What is FTCMaster?</u></h3>
         <p>FTCMaster is a comprehensive tool for analyzing and visualizing FTC team data and history.
-        It was developed by <a href="https://h-webster.github.io/" target="_blank">Harrison Webster</a>, who is apart of <a href="https://ftc-master.vercel.app/teams/27820" target="_blank">Rundle Robotics Castle 27820.</a>
+        It was developed by <a href="https://h-webster.github.io/" target="_blank">Harrison Webster</a>, who is apart of <a href="https://ftc-master.vercel.app/teams/27820" target="_blank">Rundle Robotics Castle 27820. </a>
         FTCMaster is aimed to help teams find unique data and advanced insights to help support team scouting and strategy. For example in FTC INTO THE DEEP 2024-2025, the website makes predictions on what role a team will play in an alliance (specimen or sample).
         </p>
         <br />

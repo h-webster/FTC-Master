@@ -1,8 +1,11 @@
 import { officialAPI } from './hooks/useEventsData';
 import { scoutAPI } from './hooks/useRest';
+import { api } from './api';
+import { EVENT_VERSION } from './utils/constants';
 import { getSpecimensSamples, setScoreDetails, getThisTeam, getQuickStats } from './DataExtraction';
 import { TeamNotFound } from './Fancy';
 import {teamRolePrediction} from './DataAnalysis'
+import { collectEventData } from './CollectEventData';
 
 export async function collectTeamData(teamNumber, returnData, teamMap) {
     returnData.name = teamMap[teamNumber];
@@ -53,6 +56,24 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
 
         const eventData = await officialAPI.getMatchesData(event.code);
         console.log("Got matches for Event " + event.name);
+
+        let eventRanking = await api.getEventRankings(event.code);
+        if (!eventRanking || eventRanking.version !== EVENT_VERSION) {
+            eventRanking = await officialAPI.getRankingsData(event.code);
+            console.log("Got fresh event rankings for Event " + event.name);
+            eventRanking = collectEventData(event.code, eventRanking);
+            console.log("Event Ranking (Fresh): " + JSON.stringify(eventRanking));
+            await api.saveEventRankings(eventRanking);
+        } else {
+            console.log("Found event ranking data in API");
+            console.log("Event Ranking: " + JSON.stringify(eventRanking));
+        }
+        let rank;
+        if (eventRanking.rankings.length == 0) {
+            rank = -1;
+        } else {
+            rank = eventRanking.rankings.find(r => r.teamNumber == teamNumber).rank;
+        }
 
         let processedQuals = [];
         let processedPlayoffs = [];
@@ -170,7 +191,9 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
             quals: processedQuals,
             playoffs: processedPlayoffs,
             dateStart: formattedDateStart,
-            dateEnd: formattedDateEnd
+            dateEnd: formattedDateEnd,
+            rank: rank,
+            teams: eventRanking.rankings.length,
         });
     }
     console.log(JSON.stringify(data));
@@ -206,6 +229,6 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
     returnData.seasons[0].sponsors = [];
 
     returnData.seasons[0].rolePrediction = teamRolePrediction(specimens, samples);
-    console.log(returnData.seasons[0].rolePrediction);
+    console.log(returnData);
     return returnData;
 }

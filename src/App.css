@@ -117,10 +117,14 @@
 
 .event-small {
   text-align: left;
-  gap: 4px;
+  gap: 0;
   display: flex;
   align-items: center;
   font-size: 17px;
+}
+
+.event-small img {
+  margin-right: 4px;
 }
 
 .redTeam {

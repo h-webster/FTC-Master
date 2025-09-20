@@ -39,6 +39,19 @@ export const api = {
     }
   },
 
+  async getEventRankings(eventCode) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/eventRanks/${eventCode}`);
+      if (!response.ok) {
+        throw new Error('Event rankings not found, getting fresh data...');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching event rankings:', error);
+      return null;
+    }
+  },
+
   // Save team data to MongoDB
   async saveTeam(teamData) {
     //console.log("attempting to save:", JSON.stringify(teamData, null, 2));
@@ -60,6 +73,29 @@ export const api = {
       return await response.json();
     } catch (error) {
       console.error('Error saving team:', error);
+      throw error;
+    }
+  },
+
+  async saveEventRankings(eventData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/eventRanks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => response.text());
+        console.error('Server error response:', errorData);
+        throw new Error(`Failed to save event rankings: ${JSON.stringify(errorData)}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error saving event rankings:', error);
       throw error;
     }
   },

@@ -21,9 +21,9 @@ export const officialAPI = {
     async getScoreDetails(eventCode, tournamentLevel) {
         const res = await fetch(`${API_BASE_URL}/api/scores/${eventCode}/${tournamentLevel}`);
         return res.json();
+    },
+    async getRankingsData(eventCode) {
+        const res = await fetch(`${API_BASE_URL}/api/rankings/${eventCode}`);
+        return res.json();
     }
-}
-
-
-
-
+};

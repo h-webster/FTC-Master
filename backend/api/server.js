@@ -140,6 +140,25 @@ app.get('/api/scores/:eventCode/:tournamentLevel', async (req, res) => {
   }
 }) 
 
+app.get('/api/rankings/:eventCode', async (req, res) => {
+  const eventCode = req.params.eventCode;
+  if (!eventCode) return res.status(400).json({ error: "eventCode is required" });
+
+  const url = `https://ftc-api.firstinspires.org/v2.0/2024/rankings/${eventCode}`;
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "Authorization": "Basic " + Buffer.from(`${username}:${token}`).toString("base64")
+      }
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+})
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });

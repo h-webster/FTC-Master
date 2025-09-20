@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { Team, TeamsList } = require('../schema');
+const { Team, TeamsList, EventRank } = require('../schema');
 
 const router = express.Router();
 
@@ -81,6 +81,19 @@ router.get('/teams/:number', async (req, res) => {
   }
 });
 
+// Get event rankings by event code
+router.get('/eventRanks/:eventCode', async (req, res) => {
+  try {
+    const event = await EventRank.findOne({ eventCode: req.params.eventCode });
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    res.json(event);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Create or update team
 router.post('/teams', async (req, res) => {
   try {
@@ -102,6 +115,32 @@ router.post('/teams', async (req, res) => {
     }
     
     res.status(201).json(team);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Create or update event rankings
+router.post('/eventRanks', async (req, res) => {
+  try {
+    const { eventCode, version, rankings } = req.body;
+    
+    // Check if event exists
+    let event = await EventRank.findOne({ eventCode });
+    
+    if (event) {
+      // Update existing event rankings
+      event.version = version;
+      event.rankings = rankings;
+      await event.save();
+    }
+    else {
+      // Create new event rankings
+      event = new EventRank({ eventCode, version, rankings });
+      await event.save();
+    }
+    
+    res.status(201).json(event);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -144,6 +183,26 @@ router.put('/teams/:number', async (req, res) => {
   }
 });
 
+// Update event ranking data
+router.put('/eventRanks/:eventCode', async (req, res) => {
+  try {
+    const { eventCode, version, rankings } = req.body;
+    const event = await EventRank.findOneAndUpdate(
+      { eventCode: req.params.eventCode },
+      { version, rankings },
+      { new: true, runValidators: true }
+    );
+    
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.json(event);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // Delete team
 router.delete('/teams/:number', async (req, res) => {
   try {
@@ -154,6 +213,22 @@ router.delete('/teams/:number', async (req, res) => {
     }
     
     res.json({ message: 'Team deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete('/eventRanks/:eventCode', async (req, res) => {
+  try {
+    const eventCode = req.params.eventCode;
+    if (!eventCode) return res.status(400).json({ error: "eventCode is required" });
+
+    const event = await EventRank.findOneAndDelete({ eventCode: eventCode });
+
+    if (!event) {
+      return res.status(404).json({ message: 'Event rankings not found' });
+    }
+    res.json({ message: 'Rankings deleted successfully', result });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

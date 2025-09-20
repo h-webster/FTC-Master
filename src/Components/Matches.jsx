@@ -1,5 +1,5 @@
 import calendericon from '../assets/calender.svg';
-
+import podiumicon from '../assets/podium.svg';
 export const Matches = ({season, teamNumber}) => {
     if (season.events == null) {
         return null;
@@ -12,6 +12,12 @@ export const Matches = ({season, teamNumber}) => {
                 <div className='event' key={idx}>
                     <h2>{e.name}</h2>
                     <h3 className='event-small'><img src={calendericon} width={20} height={20} />{e.dateStart} - {e.dateEnd}</h3>
+                    {e.rank !== -1 && (
+                        <h3 className='event-small'>
+                            <img src={podiumicon} width={20} height={20} />
+                            Qualification position: {e.rank}/{e.teams}
+                        </h3>
+                    )}
                     <table>
                     <thead>
                         <tr>

@@ -10,6 +10,8 @@ const teamSchema = new mongoose.Schema({
       name: {type: String, required: true },
       dateStart: { type: String, required: true },
       dateEnd: { type: String, required: true },
+      rank: { type: Number, required: true },
+      teams: { type: Number, required: true},
       quals: [{
         match: { type: Number },
         points: { type: Number },
@@ -91,13 +93,33 @@ const teamsListSchema = new mongoose.Schema({
   }]
 });
 
+const eventRankSchema = new mongoose.Schema({
+  eventCode: { type: String, required: true, unique: true },
+  version: { type: Number, required: true },
+  rankings: [{
+    teamNumber: { type: Number, required: true },
+    rank: { type: Number, required: true },
+    wins: { type: Number, required: true },
+    losses: { type: Number, required: true },
+    ties: { type: Number, required: true },
+    rp: { type: Number, required: true }, // sortOrder1
+    tbp: { type: Number, required: true }, // sortOrder2
+    ascent: { type: Number, required: true }, // sortOrder3
+    highScore: { type: Number, required: true }, // sortOrder4
+    matchesPlayed: { type: Number, required: true }
+  }]
+});
+
 // Create models
 const Team = mongoose.model('Team', teamSchema);
 const TeamsList = mongoose.model('TeamsList', teamsListSchema);
+const EventRank = mongoose.model('EventRank', eventRankSchema);
 
 module.exports = {
   Team,
   TeamsList,
   teamSchema,
-  teamsListSchema
+  teamsListSchema,
+  EventRank,
+  eventRankSchema
 };
