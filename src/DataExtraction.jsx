@@ -119,12 +119,24 @@ export async function getThisTeam(teamNumber) {
     return thisTeamData;
 }
 
-async function getScoreDetails(eventCode, teamNumber) {
+export async function getScoreDetails(eventCode, teamNumber) {
     const qualScoreDetails = await officialAPI.getScoreDetails(eventCode, "qual", teamNumber);
     console.log(`Got ${eventCode} qual score details`);
     const playoffScoreDetails = await officialAPI.getScoreDetails(eventCode, "playoff", teamNumber);
     console.log(`Got ${eventCode} playoff score details`);
 
+    const scoreByQualMatch = new Map();
+    for (const score of qualScoreDetails.matchScores) {
+        scoreByQualMatch.set(score.matchNumber, score);
+    }
 
-    qualScoreDetails.matchScores
+    const scoreByPlayoffMatch = new Map();
+    for (const score of playoffScoreDetails.matchScores) {
+        scoreByPlayoffMatch.set(score.matchNumber, score);
+    }
+
+    return {
+        qual: scoreByQualMatch,
+        playoff: scoreByPlayoffMatch
+    };
 }

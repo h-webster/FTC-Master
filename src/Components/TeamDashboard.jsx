@@ -6,16 +6,15 @@ import storage from '../utils/storage';
 import { loadTeamList } from '../loadStorageValues';
 import { useState, useEffect } from 'react';
 import LoadingScreen from './LoadingScreen';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { useTeamData } from '../hooks/useTeamData';
 import Header from './Header';
 
 export default function TeamDashboard() {
-  const navigate = useNavigate();
   const { teamNumber } = useParams();
-  const [seasonIndex, setSeasonIndex] = useState(0);
+  const [seasonIndex] = useState(0);
   const [ready, setReady] = useState(false);
 
   // Initialize teamMap and teamList
@@ -46,7 +45,6 @@ export default function TeamDashboard() {
 
   if (!ready || loading) return <LoadingScreen />;
 
-  const goHome = () => navigate('/');
 
   return (
     <>

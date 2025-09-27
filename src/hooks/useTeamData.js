@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '../api';
 import { getExtraData } from '../Query';
 import { extractExtraData } from '../DataExtraction';
@@ -28,14 +28,48 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
   const [loading, setLoading] = useState(false);
   const [loadedExtras, setLoadingExtras] = useState(true);
   const [savedTeam, setSavedTeam] = useState(null);
+  
+  // Use ref to get current teamData without causing re-renders
+  const teamDataRef = useRef(teamData);
+  teamDataRef.current = teamData;
 
   // Fetch fresh team data
-  const fetchTeamData = async () => {
-    const result = await collectTeamData(teamNumber, teamData, teamMap);
+  const fetchTeamData = useCallback(async () => {
+    const result = await collectTeamData(teamNumber, teamDataRef.current, teamMap);
     setTeamData(result);
     setLoading(false);
     return result;
-  };
+  }, [teamNumber, teamMap]);
+
+  // Fetch extra data
+  const fetchExtraData = useCallback(async () => {
+    if (savedTeam) {
+      if (savedTeam.seasons[0].events.length === 0) {
+        setLoadingExtras(false);
+        return;
+      }
+      if (savedTeam.seasons[0].luckScore !== -999 && savedTeam.version === VERSION) {
+        setLoadingExtras(false);
+        return;
+      }
+    }
+
+    if (teamDataRef.current.seasons[0].events.length === 0) {
+      setLoadingExtras(false);
+      return;
+    }
+
+    try {
+      const extraRaw = await getExtraData(teamNumber);
+      const extraResult = extractExtraData(extraRaw, teamDataRef.current);
+      setTeamData(extraResult);
+      setLoadingExtras(false);
+
+      await api.updateTeam(teamNumber, { ...extraResult, number: teamNumber });
+    } catch (err) {
+      console.error("Failed to fetch/update extra data:", err);
+    }
+  }, [savedTeam, teamNumber]);
 
   // Effect: load main team data
   useEffect(() => {
@@ -65,43 +99,14 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
     };
 
     fetchData();
-  }, [submitted, teamNumber, teamMap]);
+  }, [submitted, teamNumber, teamMap, fetchTeamData]);
 
   // Effect: load extra data
   useEffect(() => {
     if (!submitted || loading) return;
 
-    const fetchExtraData = async () => {
-      if (savedTeam) {
-        if (savedTeam.seasons[0].events.length === 0) {
-          setLoadingExtras(false);
-          return;
-        }
-        if (savedTeam.seasons[0].luckScore !== -999 && savedTeam.version === VERSION) {
-          setLoadingExtras(false);
-          return;
-        }
-      }
-
-      if (teamData.seasons[0].events.length === 0) {
-        setLoadingExtras(false);
-        return;
-      }
-
-      try {
-        const extraRaw = await getExtraData(teamNumber);
-        const extraResult = extractExtraData(extraRaw, teamData);
-        setTeamData(extraResult);
-        setLoadingExtras(false);
-
-        await api.updateTeam(teamNumber, { ...extraResult, number: teamNumber });
-      } catch (err) {
-        console.error("Failed to fetch/update extra data:", err);
-      }
-    };
-
     fetchExtraData();
-  }, [loading, savedTeam, teamNumber, submitted]);
+  }, [loading, savedTeam, teamNumber, submitted, fetchExtraData]);
 
   return { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras };
 };

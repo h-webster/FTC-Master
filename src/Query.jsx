@@ -142,7 +142,7 @@ export async function getExtraData(teamNumber) {
     return extraDataQuery.data;
   }
   
-export async function getAllTeams(teamNumber) {
+export async function getAllTeams() {
   const query = `
     {
       teamsSearch(limit: 100000) {

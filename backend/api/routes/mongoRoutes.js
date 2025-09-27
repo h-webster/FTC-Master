@@ -186,7 +186,7 @@ router.put('/teams/:number', async (req, res) => {
 // Update event ranking data
 router.put('/eventRanks/:eventCode', async (req, res) => {
   try {
-    const { eventCode, version, rankings } = req.body;
+    const { version, rankings } = req.body;
     const event = await EventRank.findOneAndUpdate(
       { eventCode: req.params.eventCode },
       { version, rankings },
@@ -228,7 +228,7 @@ router.delete('/eventRanks/:eventCode', async (req, res) => {
     if (!event) {
       return res.status(404).json({ message: 'Event rankings not found' });
     }
-    res.json({ message: 'Rankings deleted successfully', result });
+    res.json({ message: 'Rankings deleted successfully', event });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

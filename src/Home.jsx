@@ -14,14 +14,14 @@ import storage from './utils/storage';
 
 export default function Home() {
   const navigate = useNavigate();
-  const [seasonIndex, setSeasonIndex] = useState(0);
+  const [seasonIndex] = useState(0);
   const [teamNumber, setTeamNumber] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [loadedTeamList, setLoadedTeamList] = useState(false);
   const [loadedName, setLoadedName] = useState(false);
 
-  const { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras } = useTeamData(teamNumber, submitted, storage.teamMap);
+  const { teamData, loading, setLoading, setLoadingExtras } = useTeamData(teamNumber, submitted, storage.teamMap);
 
   // Calculate roleDiff when mockData changes
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Home() {
 
         // turn team list into teamMap
         const teamArray = teamList[0].teams;
-        const teamDict = teamArray.reduce((acc, team) => {
+        teamArray.reduce((acc, team) => {
           acc[team.number] = team.name;
           return acc; 
         }, {});
