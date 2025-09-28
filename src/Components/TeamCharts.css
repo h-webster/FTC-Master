@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 .charts-container {
   display: flex;
   gap: 32px;
@@ -12,7 +14,7 @@
   padding: 18px 12px 8px 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   flex: 1 1 220px;
-  min-width: 225px;
+  min-width: max(225px, 40%);
   text-align: center;
 }
 
@@ -73,4 +75,47 @@
     flex-direction: column;
     gap: 20px;
   }
+}
+
+.ai-chart {
+  font-family: "PT Sans", sans-serif;
+}
+.chart-card:has(.ai-chart) {
+  flex: 0 1 auto; /* Don't grow, but allow natural width */
+  min-width: 40%;
+  width: auto; /* Allow natural width */
+}
+
+.ai-score {
+  font-size: 2.4em;
+  font-weight: bold; 
+  text-align: center;
+}
+
+.ai-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: "PT Sans", sans-serif;
+}
+
+.inner-insight {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.strength-title, .weakness-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.strength-title {
+  color: #4caf50;
+}
+
+.weakness-title {
+  color: #f44336;
 }

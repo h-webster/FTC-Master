@@ -89,9 +89,6 @@ export default function Home() {
     setSubmitted(true);
   };
 
-  if (loading || loadedName) {
-    return <LoadingScreen />;
-  }
 
   if (!submitted) {
     return (

@@ -4,5 +4,7 @@ export default {
     teamMap: null,
     setTeamMap(v) { this.teamMap = v; },
     roleDiff: null,
-    setRoleDiff(v) { this.roleDiff = v; }
+    setRoleDiff(v) { this.roleDiff = v; },
+    loadedExtras: false,
+    setLoadingExtras(v) { this.loadedExtras = v; }
 };

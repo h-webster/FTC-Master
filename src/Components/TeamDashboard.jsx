@@ -14,12 +14,14 @@ import Header from './Header';
 
 export default function TeamDashboard() {
   const navigate = useNavigate();
+  //const [finallloadedExtra = false;
   const { teamNumber } = useParams();
   const [seasonIndex, setSeasonIndex] = useState(0);
   const [ready, setReady] = useState(false);
 
   // Initialize teamMap and teamList
   useEffect(() => {
+    storage.setLoadingExtras(false);
     const initData = async () => {
       if (!storage.teamList || !storage.teamMap) {
         await loadTeamList();
@@ -43,6 +45,11 @@ export default function TeamDashboard() {
   useEffect(() => {
     document.title = `FTCMaster - Team ${teamNumber}`;
   }, [teamNumber]);
+
+  useEffect(() => {
+    console.log("NOW loaded extras: " + loadedExtras);
+    console.log("storage loaded extras: " + storage.loadedExtras);
+  }, [loadedExtras]);
 
   if (!ready || loading) return <LoadingScreen />;
 

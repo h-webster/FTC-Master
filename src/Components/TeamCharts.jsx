@@ -2,6 +2,9 @@ import { PieChart, Pie, Cell } from 'recharts';
 import { PointsGraph } from './LineGraph';
 import { Ordinalize } from '../Fancy';
 import './TeamCharts.css';
+import storage from '../utils/storage';
+import { openAPI } from '../hooks/useAi';
+import insight from '../assets/insight.png';
 
 const COLORS = ['#4caf50', '#f44336', '#ffeb3b'];
 
@@ -18,9 +21,34 @@ export const TeamCharts = ({ season }) => {
   }
 
   const totalTeams = season.quickStats.count;
-
+  
+  const { strength, weakness, score } = season.aiInsight ? openAPI.formatAI(season.aiInsight) : { strength: '', weakness: '', score: 0 };
+  console.log("Ai insight length: " + (season.aiInsight?.length || 'undefined'));
   return (
     <div className="charts-container">
+      <div className='chart-card'>
+        <div class='ai-title'>
+          <h2>AI Insight</h2>
+          <img src={insight} alt="Insight Icon" className="insight-icon" width={30} height={30}/>
+        </div>
+        <div className='ai-insight ai-chart'>
+          { !storage.loadedExtras ? (
+            season.aiInsight ? (
+              <div className='inner-insight'>
+                <h3 className='ai-score' style={{color: `hsl(${score * 12}, 70%, 45%)`}}>Score: {score}/10</h3>
+                <h3 className='strength-title'>Strengths:</h3>
+                <p className='strengths' dangerouslySetInnerHTML={{__html: strength}}/>
+                <h3 className='weakness-title'>Weaknesses:</h3>
+                <p className='weaknesses' dangerouslySetInnerHTML={{__html: weakness}}/>
+              </div>
+            ) : (
+              <p>No insights available.</p>            
+            )
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
+      </div>
       <div className='chart-card'>
         <h2>Best OPR Stats</h2>
         <div className='quick-stats'>

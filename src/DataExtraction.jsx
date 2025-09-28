@@ -2,9 +2,11 @@ import { calculateCarriedScore} from './DataAnalysis';
 import { officialAPI } from './hooks/useEventsData';
 import { scoutAPI } from './hooks/useRest';
 import { TeamNotFound } from './Fancy';
+import { api } from './api';
+import { openAPI } from './hooks/useAi';
 
 
-export function extractExtraData(teamData, returnData) {
+export async function extractExtraData(teamData, returnData) {
     console.log(teamData);
     const matches = teamData.teamByNumber.matches;
     let games = [];
@@ -42,11 +44,12 @@ export function extractExtraData(teamData, returnData) {
         totalOpponentOpr += game.opponent;
     }
     let luckScore = calculateCarriedScore(OPR, totalPartnerOpr, totalOpponentOpr, games.length) * 2;
-    
+    let analysis = await openAPI.getAIRequest(returnData);
     // Create a new season with the updated luckScore
     const newSeason = {
         ...returnData.seasons[0],
-        luckScore: luckScore.toFixed(2)
+        luckScore: luckScore.toFixed(2),
+        aiInsight: analysis
     };
     
     // Create new seasons array
@@ -119,12 +122,24 @@ export async function getThisTeam(teamNumber) {
     return thisTeamData;
 }
 
-async function getScoreDetails(eventCode, teamNumber) {
+export async function getScoreDetails(eventCode, teamNumber) {
     const qualScoreDetails = await officialAPI.getScoreDetails(eventCode, "qual", teamNumber);
     console.log(`Got ${eventCode} qual score details`);
     const playoffScoreDetails = await officialAPI.getScoreDetails(eventCode, "playoff", teamNumber);
     console.log(`Got ${eventCode} playoff score details`);
 
+    const scoreByQualMatch = new Map();
+    for (const score of qualScoreDetails.matchScores) {
+        scoreByQualMatch.set(score.matchNumber, score);
+    }
 
-    qualScoreDetails.matchScores
+    const scoreByPlayoffMatch = new Map();
+    for (const score of playoffScoreDetails.matchScores) {
+        scoreByPlayoffMatch.set(score.matchNumber, score);
+    }
+
+    return {
+        qual: scoreByQualMatch,
+        playoff: scoreByPlayoffMatch
+    };
 }

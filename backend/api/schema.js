@@ -49,6 +49,7 @@ const teamSchema = new mongoose.Schema({
     ties: { type: Number, default: 0 },
     avgPoints: { type: String, default: '0' },
     luckScore: { type: String, default: '-999' },
+    aiInsight: { type: String, default: 'No insights available.' },
     specimens: [Number],
     samples: [Number],
     points: [{
