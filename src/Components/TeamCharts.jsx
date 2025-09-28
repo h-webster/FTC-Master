@@ -2,13 +2,12 @@ import { PieChart, Pie, Cell } from 'recharts';
 import { PointsGraph } from './LineGraph';
 import { Ordinalize } from '../Fancy';
 import './TeamCharts.css';
-import storage from '../utils/storage';
 import { openAPI } from '../hooks/useAi';
 import insight from '../assets/insight.png';
 
 const COLORS = ['#4caf50', '#f44336', '#ffeb3b'];
 
-export const TeamCharts = ({ season }) => {
+export const TeamCharts = ({ season, loadedExtras }) => {
   const winLossData = [
     { name: 'Wins', value: season.win },
     { name: 'Losses', value: season.loss },
@@ -27,12 +26,14 @@ export const TeamCharts = ({ season }) => {
   return (
     <div className="charts-container">
       <div className='chart-card'>
-        <div class='ai-title'>
+        <div className='ai-title'>
           <h2>AI Insight</h2>
           <img src={insight} alt="Insight Icon" className="insight-icon" width={30} height={30}/>
         </div>
         <div className='ai-insight ai-chart'>
-          { !storage.loadedExtras ? (
+          { loadedExtras ? (
+            <p>Loading...</p>
+          ) : (
             season.aiInsight ? (
               <div className='inner-insight'>
                 <h3 className='ai-score' style={{color: `hsl(${score * 12}, 70%, 45%)`}}>Score: {score}/10</h3>
@@ -44,8 +45,6 @@ export const TeamCharts = ({ season }) => {
             ) : (
               <p>No insights available.</p>            
             )
-          ) : (
-            <p>Loading...</p>
           )}
         </div>
       </div>

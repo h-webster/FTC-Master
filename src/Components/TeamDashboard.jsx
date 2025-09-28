@@ -6,18 +6,15 @@ import storage from '../utils/storage';
 import { loadTeamList } from '../loadStorageValues';
 import { useState, useEffect } from 'react';
 import LoadingScreen from './LoadingScreen';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { useTeamData } from '../hooks/useTeamData';
 import Header from './Header';
 
 export default function TeamDashboard() {
-<<<<<<< HEAD
   const navigate = useNavigate();
   //const [finallloadedExtra = false;
-=======
->>>>>>> ad30c95adcb2eba5c7fc231bd3b95bf45ab22817
   const { teamNumber } = useParams();
   const [seasonIndex] = useState(0);
   const [ready, setReady] = useState(false);
@@ -76,7 +73,7 @@ export default function TeamDashboard() {
             roleDiff={storage.roleDiff}
           />
 
-          <TeamCharts season={teamData.seasons[seasonIndex]} />
+          <TeamCharts season={teamData.seasons[seasonIndex]} loadedExtras={loadedExtras} />
 
           <Matches season={teamData.seasons[seasonIndex]} teamNumber={teamNumber} />
         </div>

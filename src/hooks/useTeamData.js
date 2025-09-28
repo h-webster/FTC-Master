@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '../api';
 import { getExtraData } from '../Query';
 import { extractExtraData } from '../DataExtraction';
@@ -45,8 +44,6 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
   // Fetch fresh team data
   const fetchTeamData = useCallback(async () => {
     const result = await collectTeamData(teamNumber, teamDataRef.current, teamMap);
-  const fetchTeamData = useCallback(async () => {
-    const result = await collectTeamData(teamNumber, teamDataRef.current, teamMap);
     setTeamData(result);
     setLoading(false);
     return result;
@@ -54,7 +51,7 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
 
   // Fetch extra data
   const fetchExtraData = useCallback(async () => {
-    if (savedTeam) {
+    if (savedTeam && savedTeam.number === teamNumber) {
       if (savedTeam.seasons[0].events.length === 0) {
         setLoadingExtras(false);
         return;
@@ -73,17 +70,23 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
 
     try {
       resetExtraData();
+      console.log(`Fetching extra data for team ${teamNumber}`);
       const extraRaw = await getExtraData(teamNumber);
+      console.log(`Extra raw data team number:`, extraRaw?.teamByNumber?.number);
       const extraResult = await extractExtraData(extraRaw, teamDataRef.current);
       console.log("Current loading extras state:", loadedExtras);
-      storage.setLoadingExtras(false);
+      console.log(`Extra result team number:`, extraResult.number);
+      console.log(`Extra result quickStats number:`, extraResult.seasons[0]?.quickStats?.number);
       setTeamData(extraResult);
       setLoadingExtras(false);
+      storage.setLoadingExtras(false);
       console.log("Done fetching extra data!");
 
       await api.updateTeam(teamNumber, { ...extraResult, number: teamNumber });
     } catch (err) {
       console.error("Failed to fetch/update extra data:", err);
+      setLoadingExtras(false);
+      storage.setLoadingExtras(false);
     }
   }, [savedTeam, teamNumber]);
 
@@ -102,6 +105,8 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
         setLoadingExtras(false);
       } else {
         const freshData = await fetchTeamData();
+        console.log(`Fresh data for team ${teamNumber}:`, freshData);
+        console.log(`Fresh data quickStats number:`, freshData.seasons[0]?.quickStats?.number);
         const payload = { ...freshData, number: teamNumber, version: VERSION };
         try {
           if (savedTeamData) await api.updateTeam(teamNumber, payload);
@@ -116,14 +121,12 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
 
     fetchData();
   }, [submitted, teamNumber, teamMap, fetchTeamData]);
-  }, [submitted, teamNumber, teamMap, fetchTeamData]);
 
   // Effect: load extra data
   useEffect(() => {
     if (!submitted || loading) return;
 
     fetchExtraData();
-  }, [loading, savedTeam, teamNumber, submitted, fetchExtraData]);
   }, [loading, savedTeam, teamNumber, submitted, fetchExtraData]);
 
   useEffect(() => {
@@ -139,6 +142,12 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
     setLoading(true);
     storage.setLoadingExtras(true);
     setLoadingExtras(true);
+    // Clear any existing AI insight data to prevent stale data
+    setTeamData(prevTeamData => ({
+      ...prevTeamData,
+      aiInsight: undefined,
+      luckScore: undefined
+    }));
   }, [teamNumber]);
   return { teamData, setTeamData, loading, setLoading, loadedExtras, setLoadingExtras };
 };
