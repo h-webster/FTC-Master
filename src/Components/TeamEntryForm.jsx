@@ -9,12 +9,6 @@ export const TeamEntryForm = ({ onSubmit, error, mockData }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (teamNumber.trim()) {
-      onSubmit(teamNumber);
-    }
-  };
 
   const handleInputChange = (e) => {
     const value = e.target.value;

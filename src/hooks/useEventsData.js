@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { TeamNotFound } from '../Fancy';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' ? 'https://backend-six-sooty-74.vercel.app' : 'http://localhost:5000';

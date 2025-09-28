@@ -1,21 +1,20 @@
-import { getAllTeamNumbers } from '../Query';
 import { VERSION } from './constants';
 import { api } from '../api';
-import { getTeamData, getExtraData } from '../Query';
-import { extractExtraData } from '../DataExtraction';
+import { getTeamData } from '../Query';
+import { collectTeamData } from '../CollectTeamData';
 
-export async function massTeamExtraction(mockData) {
+export async function massTeamExtraction() {
     console.log("DISABLED");
     return null;
-    let numberData = await getAllTeamNumbers();
-    console.log("Extracting team number data");
+    // const numberData = await getAllTeamNumbers();
+    // console.log("Extracting team number data");
 
-    for (let team of numberData.teamsSearch) {
-
-    }
+    // for (let team of numberData.teamsSearch) {
+    //     await runTeamNumber(team.number, mockData);
+    // }
 }
 
-async function runTeamNumber(teamNum, mockData) {
+async function _runTeamNumber(teamNum, mockData) {
     // First, try to get data from MongoDB
     let savedTeamData = await api.getTeam(teamNum);
     if (savedTeamData && savedTeamData.version == VERSION) {
@@ -26,7 +25,7 @@ async function runTeamNumber(teamNum, mockData) {
         console.log(`Found saved team ${teamNum} data ~ WRONG VERSION`);
         const data = await getTeamData(teamNum);
         console.log(`Got ${teamNum} API data`);
-        const teamDataResult = extractTeamData(data, mockData);
+        const teamDataResult = await collectTeamData(teamNum, data, mockData);
         try {
             const newDataToUpdate = {
                 ...teamDataResult,
@@ -43,7 +42,7 @@ async function runTeamNumber(teamNum, mockData) {
         console.log(`Fetching team ${teamNum} api data`);
         const data = await getTeamData(teamNum);
         console.log(`Got ${teamNum} API data`);
-        const teamDataResult = extractTeamData(data, mockData);
+        const teamDataResult = await collectTeamData(teamNum, data, mockData);
         
         // Save to MongoDB
         try {

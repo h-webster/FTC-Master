@@ -55,7 +55,7 @@ const openTeam = (teamNumber, nav) => {
     nav(`/teams/${teamNumber}`);
 }
 
-const Match = ({m, idx, jdx, teamNumber, nav}) => {
+const Match = ({m, teamNumber, nav}) => {
     return (
         <tr className="matchRow">
             <td>{m.match}</td>

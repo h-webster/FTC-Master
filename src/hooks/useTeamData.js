@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '../api';
 import { getExtraData } from '../Query';
 import { extractExtraData } from '../DataExtraction';
@@ -42,6 +43,8 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
   }, []);
   
   // Fetch fresh team data
+  const fetchTeamData = useCallback(async () => {
+    const result = await collectTeamData(teamNumber, teamDataRef.current, teamMap);
   const fetchTeamData = useCallback(async () => {
     const result = await collectTeamData(teamNumber, teamDataRef.current, teamMap);
     setTeamData(result);
@@ -113,12 +116,14 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
 
     fetchData();
   }, [submitted, teamNumber, teamMap, fetchTeamData]);
+  }, [submitted, teamNumber, teamMap, fetchTeamData]);
 
   // Effect: load extra data
   useEffect(() => {
     if (!submitted || loading) return;
 
     fetchExtraData();
+  }, [loading, savedTeam, teamNumber, submitted, fetchExtraData]);
   }, [loading, savedTeam, teamNumber, submitted, fetchExtraData]);
 
   useEffect(() => {

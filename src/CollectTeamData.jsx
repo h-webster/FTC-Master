@@ -1,5 +1,4 @@
 import { officialAPI } from './hooks/useEventsData';
-import { scoutAPI } from './hooks/useRest';
 import { api } from './api';
 import { EVENT_VERSION } from './utils/constants';
 import { getSpecimensSamples, setScoreDetails, getThisTeam, getQuickStats } from './DataExtraction';
@@ -81,7 +80,6 @@ export async function collectTeamData(teamNumber, returnData, teamMap) {
         
 
         let scoreByQualMatch;
-        let scoreByPlayoffMatch;
         scoreByQualMatch = await setScoreDetails(event.code);
         console.log("Got score details for Event " + event.name);
 
