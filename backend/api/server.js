@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { Team, TeamsList } = require('./schema');
+const { OpenAI } = require('openai');
 const mongoRoutes = require('./routes/mongoRoutes');
 
 let PORT;
@@ -29,6 +30,7 @@ app.use(express.json({ limit: '50mb' }));
 
 const username = process.env.FTC_USERNAME;
 const token = process.env.FTC_TOKEN;
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use('/api', mongoRoutes);
 
@@ -155,6 +157,24 @@ app.get('/api/rankings/:eventCode', async (req, res) => {
     const data = await response.json();
     res.json(data);
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+})
+
+app.post('/api/openai', async (req, res) => {
+  try {
+    const { data } = req.body;
+    const completion = await client.chat.completions.create({
+      model: "gpt-5-nano",
+      messages: [
+        { role: "system", content: "You are an expert FTC (FIRST Tech Challenge) scouting assistant that provides unbiased, data-driven team analysis. Your role is to evaluate teams objectively based on their performance, capabilities, and potential.\n\nANALYSIS REQUIREMENTS:\n- Provide balanced assessments of team strengths and weaknesses\n- Use a 1.0-10.0 scoring system with one decimal place precision (e.g., 6.3, 7.8)\n- Base evaluations on observable performance metrics, consistency, and strategic capabilities\n\nFORMAT REQUIREMENTS (MUST BE FOLLOWED EXACTLY):\n$STRENGTH: <li>[strength 1]</li> <li>[strength 2]</li> <li>[additional strengths as needed]</li>\n$WEAKNESS: <li>[weakness 1]</li> <li>[weakness 2]</li> <li>[additional weaknesses as needed]</li>\n$SCORE: [numerical score]\n\nSCORING GUIDELINES:\n- 0.0-3.0: Significant challenges, inconsistent performance\n- 3.1-5.0: Below average, notable areas for improvement\n- 5.1-7.0: Average to good performance, solid fundamentals\n- 7.1-9.5: Strong performance, competitive capabilities\n- 9.5-10.0: Exceptional performance, championship contenders\n\nEnsure all analysis is factual, constructive, and maintains the exact formatting structure provided." },
+        { role: "user", content: `Analyze: ${JSON.stringify(data)}` }
+      ]
+    });
+
+    res.json({ analysis: completion.choices[0].message.content });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 })
