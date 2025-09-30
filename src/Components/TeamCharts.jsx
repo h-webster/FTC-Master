@@ -26,29 +26,6 @@ export const TeamCharts = ({ season, loadedExtras }) => {
   return (
     <div className="charts-container">
       <div className='chart-card'>
-        <div className='ai-title'>
-          <h2>AI Insight</h2>
-          <img src={insight} alt="Insight Icon" className="insight-icon" width={30} height={30}/>
-        </div>
-        <div className='ai-insight ai-chart'>
-          { loadedExtras ? (
-            <p>Loading...</p>
-          ) : (
-            season.aiInsight ? (
-              <div className='inner-insight'>
-                <h3 className='ai-score' style={{color: `hsl(${score * 12}, 70%, 45%)`}}>Score: {score}/10</h3>
-                <h3 className='strength-title'>Strengths:</h3>
-                <p className='strengths' dangerouslySetInnerHTML={{__html: strength}}/>
-                <h3 className='weakness-title'>Weaknesses:</h3>
-                <p className='weaknesses' dangerouslySetInnerHTML={{__html: weakness}}/>
-              </div>
-            ) : (
-              <p>No insights available.</p>            
-            )
-          )}
-        </div>
-      </div>
-      <div className='chart-card'>
         <h2>Best OPR Stats</h2>
         <div className='quick-stats'>
           <div className="quick-stat">

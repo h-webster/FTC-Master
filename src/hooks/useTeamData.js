@@ -126,8 +126,9 @@ export const useTeamData = (teamNumber, submitted, teamMap = {}) => {
   useEffect(() => {
     if (!submitted || loading) return;
 
+    console.log(`useEffect triggered - loading: ${loading}, savedTeam: ${savedTeam?.number}, teamNumber: ${teamNumber}, submitted: ${submitted}`);
     fetchExtraData();
-  }, [loading, savedTeam, teamNumber, submitted, fetchExtraData]);
+  }, [loading, savedTeam, teamNumber, submitted]);
 
   useEffect(() => {
     console.log("loadedExtras changed:", loadedExtras);
